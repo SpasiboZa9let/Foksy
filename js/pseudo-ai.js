@@ -157,6 +157,12 @@ document.addEventListener("DOMContentLoaded", () => {
       lastResponseType = 'greeting';
       return;
     }
+    // Расписание, запись и время
+if (/запис|время|свободн|расписан|можно ли/i.test(lower)) {
+  addMessage("🦊 Сейчас покажу расписание — просто выбери удобное время 💅\n👉 https://dikidi.net/1456370");
+  return;
+}
+
 
     if (/как (дела|ты)/i.test(lower)) {
       addMessage(randomResponse([
