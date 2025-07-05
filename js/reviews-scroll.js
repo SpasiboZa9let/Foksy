@@ -1,17 +1,21 @@
-fetch('reviews.html')
-  .then(res => res.text())
-  .then(html => {
-    const wrapper = document.getElementById('reviews-wrapper');
-    const track = document.createElement('div');
-    track.className = 'flex reviews-track';
-    track.innerHTML = html + html; // дублируем контент для бесконечного скролла
-    wrapper.appendChild(track);
+document.addEventListener("DOMContentLoaded", async () => {
+  const wrapper = document.getElementById("reviews-wrapper");
 
-    // автопауза
-    ['pointerdown', 'touchstart'].forEach(evt => {
-      track.addEventListener(evt, () => track.classList.add('paused'));
-    });
-    ['pointerup', 'touchend', 'mouseleave'].forEach(evt => {
-      track.addEventListener(evt, () => track.classList.remove('paused'));
-    });
-  });
+  if (!wrapper) return;
+
+  const res = await fetch("reviews.html");
+  const html = await res.text();
+
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+
+  const track = document.createElement("div");
+  track.classList.add("reviews-track", "flex", "space-x-4");
+
+  track.innerHTML = temp.innerHTML + temp.innerHTML; // дублируем
+  wrapper.appendChild(track);
+
+  // При касании ставим на паузу
+  track.addEventListener("pointerdown", () => track.classList.add("paused"));
+  track.addEventListener("pointerup", () => track.classList.remove("paused"));
+});
