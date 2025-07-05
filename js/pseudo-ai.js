@@ -60,8 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn3 = document.createElement("button");
     btn3.textContent = "📅 Записаться";
     btn3.className = "bg-pink-500 text-white px-3 py-1 rounded-xl text-sm";
-    btn3.onclick = () => window.location.href = "https://t.me/foxold_a";
-
+    btn3.onclick = showBookingOptions;
     container.append(btn1, btn2, btn3);
     chat.append(container);
     chat.scrollTop = chat.scrollHeight;
@@ -144,6 +143,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     return null;
+  }
+  /**
+   * Показывает варианты записи: через DIKIDI и через Telegram
+   */
+  function showBookingOptions() {
+    addMessage(
+      `🦊 Можно записаться двумя способами:\n\n` +
+      `📅 Через DIKIDI — сам выбираешь удобное время:\n` +
+      `👉 <a href="https://dikidi.net/1456370?p=2.pi-po-ssm&o=7" target="_blank" class="text-pink-600 underline">Открыть расписание</a>\n\n` +
+      `💬 Или просто напиши мастеру напрямую:\n` +
+      `👉 <a href="https://t.me/foxold_a" target="_blank" class="text-blue-600 underline">Связаться в Telegram</a>`,
+      true
+    );
+    lastResponseType = 'booking';
   }
 
   function handleUserInput(message) {
