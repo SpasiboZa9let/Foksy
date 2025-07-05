@@ -1,33 +1,52 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const wrapper = document.getElementById("pseudo-ai-wrapper");
-  if (!wrapper) return;
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("pseudo-container");
 
-  const res = await fetch("pseudo-ai.html");
-  const html = await res.text();
-  wrapper.innerHTML = html;
+  const questions = [
+    {
+      q: "Нужно покрытие или просто маникюр?",
+      a: [
+        { text: "Покрытие", next: 1 },
+        { text: "Без покрытия", result: "Снятие покрытия — 500₽" }
+      ]
+    },
+    {
+      q: "Хочется сохранить длину или нарастить ногти?",
+      a: [
+        { text: "Сохранить", next: 2 },
+        { text: "Нарастить", result: "Наращивание ногтей — 3000₽" }
+      ]
+    },
+    {
+      q: "Нужен ли дизайн?",
+      a: [
+        { text: "Да", result: "Маникюр с покрытием — 2000₽" },
+        { text: "Нет", result: "Комби маникюр — 1200₽" }
+      ]
+    }
+  ];
 
-  const q2Block = document.getElementById("ai-q2-block");
-  const thinking = document.getElementById("ai-thinking");
-  const result = document.getElementById("ai-result");
+  let current = 0;
 
-  // Вопрос 1
-  document.querySelectorAll('#ai-options-1 .ai-btn').forEach(btn => {
-    btn.addEventListener("click", () => {
-      q2Block.classList.remove("hidden");
-      document.getElementById("ai-q1").classList.add("text-gray-400");
+  function render(index) {
+    const q = questions[index];
+    container.innerHTML = `
+      <div class="pseudo-q">${q.q}</div>
+      ${q.a.map((ans, i) => `<div class="pseudo-btn" data-id="${i}">${ans.text}</div>`).join("")}
+    `;
+
+    container.querySelectorAll(".pseudo-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = parseInt(btn.dataset.id);
+        const answer = q.a[id];
+
+        if (answer.result) {
+          container.innerHTML = `<div class="pseudo-result">${answer.result}</div>`;
+        } else if (typeof answer.next !== "undefined") {
+          render(answer.next);
+        }
+      });
     });
-  });
+  }
 
-  // Вопрос 2
-  q2Block?.querySelectorAll('.ai-btn').forEach(btn => {
-    btn.addEventListener("click", () => {
-      q2Block.classList.add("text-gray-400");
-      thinking.classList.remove("hidden");
-
-      setTimeout(() => {
-        thinking.classList.add("hidden");
-        result.classList.remove("hidden");
-      }, 2000);
-    });
-  });
+  render(current);
 });
