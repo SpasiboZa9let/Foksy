@@ -53,6 +53,12 @@
 .gallery-img:hover {
   transform: scale(1.05);
 }
+/* убираем нативную 300 ms задержку на тачах */
+.gallery-img,
+#gallery-modal {
+  touch-action: manipulation;
+}
+
 
 /* -----------------------------------------------------------
    Gallery Modal Animations
