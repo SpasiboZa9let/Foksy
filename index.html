@@ -144,6 +144,15 @@
   <script src="js/modal.js"></script>
   <script src="js/reviews-scroll.js"></script>
   <script src="js/pseudo-ai.js"></script>
+  <script>
+  function toggleService(el) {
+    const allItems = document.querySelectorAll('.service-item');
+    allItems.forEach(item => {
+      if (item !== el) item.classList.remove('active');
+    });
+    el.classList.toggle('active');
+  }
+</script>
 
 </body>
 </html>
