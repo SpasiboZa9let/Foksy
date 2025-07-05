@@ -1,5 +1,5 @@
 .reviews-track {
-  animation: scrollReviews 40s linear infinite;
+  animation: scrollReviews 20s linear infinite;
   width: max-content;
 }
 .reviews-track.paused {
