@@ -1,23 +1,16 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const container = document.getElementById("pseudo-container");
+document.addEventListener("DOMContentLoaded", () => {
+  const chat = document.getElementById("pseudo-chat");
+  const input = document.getElementById("pseudo-input");
+  const form = document.getElementById("pseudo-form");
   const reactions = document.getElementById("pseudo-reactions");
 
-  if (!container) return;
-
-  const input = document.createElement("input");
-  input.placeholder = "Задайте вопрос об услуге...";
-  input.className = "w-full mt-2 p-2 rounded border text-sm";
-  container.appendChild(input);
-
-  const log = document.createElement("div");
-  log.className = "mt-4 space-y-2 text-sm";
-  container.appendChild(log);
+  if (!chat || !input || !form || !reactions) return;
 
   const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   const pseudoResponse = async (text) => {
     const lower = text.toLowerCase();
-    await delay(600); // эффект "печатает..."
+    await delay(600);
 
     if (lower.includes("снятие")) {
       return "Снятие без дальнейшего покрытия — 500₽. Хотите записаться?";
@@ -38,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const div = document.createElement("div");
     div.className = "text-gray-500 italic";
     div.textContent = "Печатает...";
-    log.appendChild(div);
+    chat.appendChild(div);
     return div;
   };
 
@@ -46,21 +39,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const q = document.createElement("div");
     q.className = "font-medium text-gray-800";
     q.textContent = question;
-    log.appendChild(q);
+    chat.appendChild(q);
 
     const typing = showTyping();
-
     const answer = await pseudoResponse(question);
-
     await delay(800);
     typing.remove();
 
     const a = document.createElement("div");
     a.className = "text-gray-700";
     a.textContent = answer;
-    log.appendChild(a);
+    chat.appendChild(a);
 
-    // Reactions
     reactions.innerHTML = "";
     ["👍 Подходит", "❓ Уточнить", "📅 Записаться"].forEach(txt => {
       const btn = document.createElement("button");
@@ -72,11 +62,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       };
       reactions.appendChild(btn);
     });
+
+    chat.scrollTop = chat.scrollHeight;
   };
 
-  input.addEventListener("keydown", e => {
-    if (e.key === "Enter" && input.value.trim()) {
-      showResponse(input.value.trim());
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const val = input.value.trim();
+    if (val) {
+      showResponse(val);
       input.value = "";
     }
   });
