@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function addFollowupButtons() {
     const container = document.createElement("div");
-    container.className = "flex gap-2";
+    container.className = "flex gap-2 mt-2";
 
     const btn1 = document.createElement("button");
     btn1.textContent = "👍 Подходит";
@@ -33,12 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn2 = document.createElement("button");
     btn2.textContent = "❓ Уточнить";
     btn2.className = "bg-yellow-400 text-white px-3 py-1 rounded-xl text-sm";
-    btn2.onclick = () => {
-      const list = Object.keys(services)
-        .map((s) => `• ${capitalize(s)}`)
-        .join("\n");
-      addMessage("🦊 Вот список доступных услуг:\n" + list);
-    };
+    btn2.onclick = showServiceList;
 
     const btn3 = document.createElement("button");
     btn3.textContent = "📅 Записаться";
@@ -54,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function addInlineConfirmButtons() {
     const container = document.createElement("div");
-    container.className = "flex gap-2";
+    container.className = "flex gap-2 mt-2";
 
     const btnYes = document.createElement("button");
     btnYes.textContent = "👍 Да";
@@ -72,11 +67,33 @@ document.addEventListener("DOMContentLoaded", () => {
     btnNo.onclick = () => {
       addMessage("Вы: Нет");
       addMessage("🦊 Уточните, пожалуйста, какую услугу вы ищете.");
+      showServiceList();
       pendingService = null;
     };
 
     container.append(btnYes, btnNo);
     chat.append(container);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function showServiceList() {
+    addMessage("🦊 Вот список доступных услуг:");
+
+    const listContainer = document.createElement("div");
+    listContainer.className = "flex flex-wrap gap-2 mt-2";
+
+    Object.keys(services).forEach((service) => {
+      const btn = document.createElement("button");
+      btn.textContent = capitalize(service);
+      btn.className = "bg-pink-100 text-pink-700 px-3 py-1 rounded-xl text-sm border";
+      btn.onclick = () => {
+        input.value = service;
+        input.focus();
+      };
+      listContainer.appendChild(btn);
+    });
+
+    chat.appendChild(listContainer);
     chat.scrollTop = chat.scrollHeight;
   }
 
@@ -112,13 +129,11 @@ document.addEventListener("DOMContentLoaded", () => {
         addInlineConfirmButtons();
       }
     } else {
-      addMessage("🦊 Привет, я Фокси. Спроси что-нибудь!");
-// (обрати внимание, между смайлом и текстом — не обычный пробел, а неразрывный U+00A0)
-
+      addMessage("🦊 Уточните, пожалуйста, что вас интересует.");
+      showServiceList();
     }
   });
 
-  // Приветственное сообщение
+  // Приветствие
   addMessage("🦊 Привет, я Фокси. Спроси что-нибудь!");
-
 });
