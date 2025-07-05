@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Мастер Маникюра</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -10,39 +10,10 @@
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(16px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateX(24px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-    @keyframes blurIn {
-      from {
-        opacity: 0;
-        filter: blur(6px);
-      }
-      to {
-        opacity: 1;
-        filter: blur(0);
-      }
-    }
+    body { font-family: 'Inter', sans-serif; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes blurIn { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: blur(0); } }
   </style>
 </head>
 
@@ -51,7 +22,7 @@
   <!-- Hero -->
   <section class="flex flex-col items-center text-center">
     <div class="w-32 h-32 rounded-full shadow-md ring-4 ring-pink-100 overflow-hidden" style="animation:fadeUp .8s forwards .1s;opacity:0;">
-      <img src="gallery/avatar/avatar.jpg" alt="Фото мастера" class="w-full h-full object-cover">
+      <img src="gallery/avatar/avatar.jpg" alt="Фото мастера" class="w-full h-full object-cover" />
     </div>
 
     <h1 class="mt-4 text-2xl font-semibold text-gray-900" style="animation:fadeUp .8s forwards .25s;opacity:0;">Анна&nbsp;Фоксольд</h1>
@@ -72,33 +43,30 @@
 
     <div class="space-y-3">
       <div class="flex items-center justify-between bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .6s;opacity:0;">
-        <div class="flex items-center space-x-3">
-          <i data-lucide="scissors" class="w-5 h-5 text-pink-400"></i>
-          <span class="text-sm">Классический маникюр</span>
-        </div>
+        <div class="flex items-center space-x-3"><i data-lucide="scissors" class="w-5 h-5 text-pink-400"></i><span class="text-sm">Классический маникюр</span></div>
         <span class="text-sm text-gray-700">1500₽</span>
       </div>
       <div class="flex items-center justify-between bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .7s;opacity:0;">
-        <div class="flex items-center space-x-3">
-          <i data-lucide="sparkles" class="w-5 h-5 text-pink-400"></i>
-          <span class="text-sm">Гель-лак</span>
-        </div>
+        <div class="flex items-center space-x-3"><i data-lucide="sparkles" class="w-5 h-5 text-pink-400"></i><span class="text-sm">Гель-лак</span></div>
         <span class="text-sm text-gray-700">2200₽</span>
       </div>
       <div class="flex items-center justify-between bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .8s;opacity:0;">
-        <div class="flex items-center space-x-3">
-          <i data-lucide="brush" class="w-5 h-5 text-pink-400"></i>
-          <span class="text-sm">Нейл-арт (1 ноготь)</span>
-        </div>
+        <div class="flex items-center space-x-3"><i data-lucide="brush" class="w-5 h-5 text-pink-400"></i><span class="text-sm">Нейл-арт (1 ноготь)</span></div>
         <span class="text-sm text-gray-700">200₽</span>
       </div>
       <div class="flex items-center justify-between bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .9s;opacity:0;">
-        <div class="flex items-center space-x-3">
-          <i data-lucide="hand" class="w-5 h-5 text-pink-400"></i>
-          <span class="text-sm">SPA-уход</span>
-        </div>
+        <div class="flex items-center space-x-3"><i data-lucide="hand" class="w-5 h-5 text-pink-400"></i><span class="text-sm">SPA-уход</span></div>
         <span class="text-sm text-gray-700">2500₽</span>
       </div>
+    </div>
+  </section>
+
+  <!-- Reviews Carousel -->
+  <section class="mt-10">
+    <h2 class="text-lg font-semibold text-gray-900 mb-3" style="animation:fadeUp .8s forwards 1s;opacity:0;">Отзывы</h2>
+
+    <div class="flex space-x-4 overflow-x-auto pl-1 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-pink-200" style="animation:blurIn .8s forwards 1.1s;opacity:0;scrollbar-width:none;">
+      <!-- ... отзывы можно оставить без изменений ... -->
     </div>
   </section>
 
@@ -107,23 +75,20 @@
     <h2 class="text-lg font-semibold text-gray-900 mb-3" style="animation:fadeUp .8s forwards 1.2s;opacity:0;">Галерея</h2>
 
     <div class="grid grid-cols-3 gap-2">
-      <button onclick="openModal('gallery/1.jpg')"><img src="gallery/1.jpg" alt="1" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
-      <button onclick="openModal('gallery/2.jpg')"><img src="gallery/2.jpg" alt="2" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
-      <button onclick="openModal('gallery/3.jpg')"><img src="gallery/3.jpg" alt="3" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
-      <button onclick="openModal('gallery/4.jpg')"><img src="gallery/4.jpg" alt="4" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
-      <button onclick="openModal('gallery/5.jpg')"><img src="gallery/5.jpg" alt="5" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
-      <button onclick="openModal('gallery/6.jpg')"><img src="gallery/6.jpg" alt="6" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
-      <button onclick="openModal('gallery/7.jpg')"><img src="gallery/7.jpg" alt="6" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
-      <button onclick="openModal('gallery/8.jpg')"><img src="gallery/8.jpg" alt="6" class="w-full h-24 object-cover rounded-xl shadow-sm"></button>
+      <img src="gallery/1.jpg" alt="Ногти 1" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/2.jpg" alt="Ногти 2" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/3.jpg" alt="Ногти 3" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/4.jpg" alt="Ногти 4" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/5.jpg" alt="Ногти 5" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/6.jpg" alt="Ногти 6" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/7.jpg" alt="Ногти 6" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/8.jpg" alt="Ногти 6" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
     </div>
   </section>
 
-  <!-- Modal -->
-  <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-80 z-50 hidden items-center justify-center" onclick="closeModal()">
-    <img id="modalImage" class="max-w-full max-h-full rounded-xl shadow-lg">
-  </div>
-
+  <script>
+    lucide.createIcons();
+  </script>
   <script src="js/modal.js"></script>
-  <script>lucide.createIcons();</script>
 </body>
 </html>
