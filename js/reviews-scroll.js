@@ -26,3 +26,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, 3000); // снимаем паузу через 3 сек
   });
 });
+document.querySelectorAll(".review-card").forEach(img => {
+  img.addEventListener("click", () => {
+    const modal = document.getElementById("modalOverlay");
+    const modalImg = document.getElementById("modalImage");
+    modalImg.src = img.src;
+    modal.classList.remove("hidden");
+  });
+});
+
+document.getElementById("modalOverlay").addEventListener("click", () => {
+  document.getElementById("modalOverlay").classList.add("hidden");
+});
