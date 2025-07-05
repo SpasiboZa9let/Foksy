@@ -1,36 +1,33 @@
+/* style/style.css */
+
 /* -----------------------------------------------------------
    ГОРИЗОНТАЛЬНАЯ карусель отзывов
 ----------------------------------------------------------- */
 :root {
-  /* Диаметр кружка-отзыва (одновременно высота wrapper’а) */
-  --review-size: 6rem;          /* 96px – меняйте при желании */
+  --review-size: 6rem; /* диаметр кружка-отзыва */
 }
 
-/* Обёртка секции. Ширина тянется на 100%, высота = размер кружка */
 #reviews-wrapper {
   height: var(--review-size);
   overflow: hidden;
   position: relative;
 }
 
-/* «Дорожка», которую создаёт JS */
 .reviews-track {
   display: flex;
   align-items: center;
-  gap: 1rem; /* расстояние между кругами */
+  gap: 1rem;
   animation: scrollReviews 20s linear infinite;
 }
 .reviews-track.paused {
   animation-play-state: paused;
 }
 
-/* Бесконечный левый скролл (-50% ⇒ контент продублирован) */
 @keyframes scrollReviews {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
 
-/* Картинки-отзывы (круги) */
 .review-img {
   width:  var(--review-size);
   height: var(--review-size);
@@ -49,16 +46,11 @@
 .gallery-img {
   transition: transform .3s ease;
   cursor: pointer;
+  touch-action: manipulation;
 }
 .gallery-img:hover {
   transform: scale(1.05);
 }
-/* убираем нативную 300 ms задержку на тачах */
-.gallery-img,
-#gallery-modal {
-  touch-action: manipulation;
-}
-
 
 /* -----------------------------------------------------------
    Gallery Modal Animations
@@ -67,21 +59,23 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity .3s ease;
+  touch-action: manipulation;
 }
 #gallery-modal.open {
   opacity: 1;
   pointer-events: auto;
 }
+#gallery-modal.closing {
+  opacity: 0;
+  pointer-events: auto;
+}
+
 #gallery-modal img {
   transform: scale(0);
   transition: transform .3s ease;
 }
 #gallery-modal.open img {
   transform: scale(1);
-}
-#gallery-modal.closing {
-  opacity: 0;
-  pointer-events: none;
 }
 #gallery-modal.closing img {
   transform: scale(0);
