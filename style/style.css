@@ -1,17 +1,53 @@
-.reviews-track {
-  animation: scrollReviews 20s linear infinite;
-  width: max-content;
+/* -----------------------------------------------------------
+   Карусель отзывов (вертикальная): круглые картинки + оверлей
+----------------------------------------------------------- */
+:root {
+  /* Диаметр «аватара» отзыва */
+  --review-size: 6rem;          /* 96 px — меняйте при желании */
 }
 
+/* Обёртка, в которую вставляется дорожка с отзывами                */
+/* Высота рассчитана на 3 «круга» + зазор; overflow скрывает лишнее */
+#reviews-wrapper {
+  height: calc(var(--review-size) * 3 + 2.5rem);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Лента, которую генерирует JS */
+.reviews-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  animation: scrollReviews 30s linear infinite;
+}
 .reviews-track.paused {
   animation-play-state: paused;
 }
 
+/* Бесконечный вертикальный подъём (-50 % — потому что дублируем HTML) */
 @keyframes scrollReviews {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
 }
 
+/* Изображения-отзывы (круги) */
+.review-img {
+  width:  var(--review-size);
+  height: var(--review-size);
+  border-radius: 9999px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+.review-img:hover { transform: scale(1.05); }
+
+/* -----------------------------------------------------------
+   — ДАЛЕЕ: стили из вашего исходного style.css —
+   (оставил без изменений – на случай,
+   если ими пользуются другие блоки сайта)
+----------------------------------------------------------- */
 .gallery-img {
   transition: transform 0.3s ease;
   cursor: pointer;
@@ -31,18 +67,13 @@
   cursor: pointer;
   transition: background 0.3s;
 }
-
-.service-item:hover {
-  background: #fdf6f9;
-}
-
+.service-item:hover { background: #fdf6f9; }
 .service-details {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s ease, opacity 0.3s ease;
   opacity: 0;
 }
-
 .service-item.active .service-details {
   max-height: 200px;
   opacity: 1;
