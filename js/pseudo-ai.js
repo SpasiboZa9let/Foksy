@@ -15,14 +15,21 @@ document.addEventListener("DOMContentLoaded", () => {
   let lastIntent = null;
   let lastResponseType = null;
 
-  function addMessage(text) {
-    if (!chat) return;
-    const bubble = document.createElement("div");
-    bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line";
+  function addMessage(text, isHTML = false) {
+  if (!chat) return;
+  const bubble = document.createElement("div");
+  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line";
+  
+  if (isHTML) {
+    bubble.innerHTML = text; // Позволяет вставлять ссылки и другие теги
+  } else {
     bubble.textContent = text;
-    chat.appendChild(bubble);
-    chat.scrollTop = chat.scrollHeight;
   }
+
+  chat.appendChild(bubble);
+  chat.scrollTop = chat.scrollHeight;
+}
+
 
   function clearButtons() {
     if (!chat) return;
@@ -159,10 +166,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     // Расписание, запись и время
 if (/запис|время|свободн|расписан|можно ли/i.test(lower)) {
-  addMessage("🦊 Сейчас покажу расписание — просто выбери удобное время 💅\n👉 https://dikidi.net/1456370");
+  addMessage(
+    `🦊 Сейчас покажу расписание — просто выбери удобное время 💅<br>
+    👉 <a href="https://dikidi.net/1456370?p=3.pi-po-ssm-sd&o=7&s=13813742&rl=0_undefined" target="_blank" class="text-pink-600 underline">Открыть запись в DIKIDI</a>`,
+    true
+  );
+  lastResponseType = 'booking';
   return;
 }
-
 
     if (/как (дела|ты)/i.test(lower)) {
       addMessage(randomResponse([
