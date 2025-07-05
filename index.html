@@ -60,37 +60,49 @@
  
   <!-- Services -->
   <section class="mt-10">
-    <h2 class="text-lg font-semibold text-gray-900 mb-4 lux" style="animation:fadeUp .8s forwards .55s;opacity:0;">Прайс</h2>
-   
-    <div class="space-y-4 text-sm leading-snug">
-      <div class="bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .6s;opacity:0;">
-        <div class="font-medium text-gray-900">Комби маникюр</div>
-        <div class="text-gray-600">Снятие + комби-маникюр</div>
-        <div class="text-right text-gray-700 font-semibold mt-1">1200₽</div>
-      </div>
-      <div class="bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .7s;opacity:0;">
-        <div class="font-medium text-gray-900">Маникюр с покрытием</div>
-        <div class="text-gray-600">Снятие + комби + укрепление (средние ногти) + дизайн (френч, втирка, стразы, наклейки)</div>
-        <div class="text-right text-gray-700 font-semibold mt-1">2000₽</div>
-      </div>
-      <div class="bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .8s;opacity:0;">
-        <div class="font-medium text-gray-900">Коррекция длины</div>
-        <div class="text-gray-600">Снятие + комби + наращивание + дизайн (френч, втирка, стразы, наклейки)</div>
-        <div class="text-right text-gray-700 font-semibold mt-1">2500₽</div>
-      </div>
-      <div class="bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards .9s;opacity:0;">
-        <div class="font-medium text-gray-900">Наращивание ногтей</div>
-        <div class="text-gray-600">Полный комплекс + индивидуальный дизайн</div>
-        <div class="text-right text-gray-700 font-semibold mt-1">3000₽</div>
-      </div>
-      <div class="bg-white rounded-2xl shadow-sm px-4 py-3" style="animation:fadeUp .8s forwards 1s;opacity:0;">
-        <div class="font-medium text-gray-900">Снятие покрытия</div>
-        <div class="text-gray-600">Без дальнейшего покрытия</div>
-        <div class="text-right text-gray-700 font-semibold mt-1">500₽</div>
+  <h2 class="text-lg font-semibold text-gray-900 mb-4">Прайс</h2>
+
+  <div class="space-y-4">
+    <div class="service-item" onclick="toggleService(this)">
+      <div class="font-semibold">Комби маникюр</div>
+      <div class="service-details text-sm mt-2 text-gray-700">
+        Снятие + комби-маникюр<br>Цена: <strong>1200₽</strong>
       </div>
     </div>
-  </section>
 
+    <div class="service-item" onclick="toggleService(this)">
+      <div class="font-semibold">Маникюр с покрытием</div>
+      <div class="service-details text-sm mt-2 text-gray-700">
+        Снятие + комби + укрепление (средние ногти) + дизайн (френч, втирка, стразы, наклейки)<br>
+        Цена: <strong>2000₽</strong>
+      </div>
+    </div>
+
+    <div class="service-item" onclick="toggleService(this)">
+      <div class="font-semibold">Коррекция длины</div>
+      <div class="service-details text-sm mt-2 text-gray-700">
+        Снятие + комби + наращивание + дизайн (френч, втирка, стразы, наклейки)<br>
+        Цена: <strong>2500₽</strong>
+      </div>
+    </div>
+
+    <div class="service-item" onclick="toggleService(this)">
+      <div class="font-semibold">Наращивание ногтей</div>
+      <div class="service-details text-sm mt-2 text-gray-700">
+        Полный комплекс + индивидуальный дизайн<br>
+        Цена: <strong>3000₽</strong>
+      </div>
+    </div>
+
+    <div class="service-item" onclick="toggleService(this)">
+      <div class="font-semibold">Снятие покрытия</div>
+      <div class="service-details text-sm mt-2 text-gray-700">
+        Без дальнейшего покрытия<br>
+        Цена: <strong>500₽</strong>
+      </div>
+    </div>
+  </div>
+</section>
 
   <!-- Reviews Carousel -->
   <section class="mt-10">
