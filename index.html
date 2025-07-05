@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="style.css" />
 
   <style>
     body { font-family: 'Inter', sans-serif; }
@@ -64,9 +65,7 @@
   <!-- Reviews -->
   <section class="mt-10">
     <h2 class="text-lg font-semibold text-gray-900 mb-3" style="animation:fadeUp .8s forwards 1s;opacity:0;">Отзывы</h2>
-    <div id="reviews-wrapper" class="overflow-hidden relative" style="animation:blurIn .8s forwards 1.1s;opacity:0;">
-      <!-- Отзывы подгружаются динамически -->
-    </div>
+    <div id="reviews-wrapper" class="overflow-x-hidden"></div>
   </section>
 
   <!-- Gallery -->
@@ -88,7 +87,7 @@
   <script>
     lucide.createIcons();
   </script>
+  <script src="js/reviews.js"></script>
   <script src="js/modal.js"></script>
-  <script src="js/reviews-scroll.js"></script>
 </body>
 </html>
