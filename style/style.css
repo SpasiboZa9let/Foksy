@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;                    /* расстояние между кругами */
-  animation: scrollReviews 30s linear infinite;
+  animation: scrollReviews 20s linear infinite;
 }
 .reviews-track.paused { animation-play-state: paused; }
 
