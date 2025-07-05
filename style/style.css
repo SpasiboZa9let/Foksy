@@ -1,0 +1,11 @@
+.reviews-track {
+  animation: scrollReviews 40s linear infinite;
+  width: max-content;
+}
+.reviews-track.paused {
+  animation-play-state: paused;
+}
+@keyframes scrollReviews {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); } /* подгоняется под дублированный контент */
+}
