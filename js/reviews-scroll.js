@@ -1,38 +1,28 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const track = document.querySelector(".reviews-track");
-  if (!track) return;
+document.addEventListener("DOMContentLoaded", async () => {
+  const wrapper = document.getElementById("reviews-wrapper");
 
-  // Дублируем изображения для бесконечного скролла
-  const imgs = Array.from(track.querySelectorAll(".review-card"));
-  imgs.forEach(img => {
-    const clone = img.cloneNode(true);
-    track.appendChild(clone);
-  });
+  if (!wrapper) return;
 
-  // Обработчики клика по каждой карточке
-  const modal = document.getElementById("fullscreenModal");
-  const modalImg = document.getElementById("fullscreenImage");
+  const res = await fetch("reviews.html");
+  const html = await res.text();
 
-  track.querySelectorAll(".review-card").forEach(img => {
-    img.addEventListener("click", () => {
-      modal.classList.remove("hidden");
-      modalImg.src = img.src;
-    });
-  });
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
 
-  // Закрытие модального окна по клику
-  modal.addEventListener("click", () => {
-    modal.classList.add("hidden");
-    modalImg.src = "";
-  });
+  const track = document.createElement("div");
+  track.classList.add("reviews-track", "flex", "space-x-4");
+  track.innerHTML = temp.innerHTML + temp.innerHTML; // дублируем
+  wrapper.appendChild(track);
 
-  // Авто-пауза при удержании или тапе
+  // Авто-снятие паузы после 3 секунд
   let pauseTimeout;
+
   track.addEventListener("pointerdown", () => {
     track.classList.add("paused");
+
     clearTimeout(pauseTimeout);
     pauseTimeout = setTimeout(() => {
       track.classList.remove("paused");
-    }, 3000);
+    }, 3000); // снимаем паузу через 3 сек
   });
 });
