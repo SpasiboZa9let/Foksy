@@ -1,12 +1,26 @@
-<!-- pseudo-ai.html -->
 <section class="mt-10">
-  <h2 class="text-lg font-semibold text-gray-900 mb-3">Рекомендация от ИИ</h2>
+  <h2 class="text-lg font-semibold text-gray-900 mb-3">Индивидуальная рекомендация</h2>
 
-  <div class="bg-white rounded-2xl p-4 shadow-sm space-y-3 text-sm leading-relaxed text-gray-700">
-    <div id="ai-progress" class="w-full bg-pink-100 h-2 rounded overflow-hidden">
-      <div class="bg-pink-400 h-2 w-0 transition-all duration-700" id="ai-bar"></div>
+  <div class="bg-white rounded-2xl p-4 shadow-sm text-sm leading-relaxed text-gray-800 space-y-3">
+    <p id="ai-q1">🤖 Здравствуйте! Вы предпочитаете классику или дизайн?</p>
+    <div id="ai-options-1" class="flex gap-2">
+      <button class="ai-btn" data-answer="Классику">Классику</button>
+      <button class="ai-btn" data-answer="Дизайн">Дизайн</button>
     </div>
-    <p><strong>Лучшее для вас:</strong> Маникюр с покрытием и дизайном — <span class="text-pink-500 font-medium">2000₽</span></p>
-    <p class="text-gray-500 text-xs italic">*На основе ваших предпочтений</p>
+
+    <div id="ai-q2-block" class="hidden">
+      <p id="ai-q2">✨ Отлично. А какой длины ногти вам нравятся?</p>
+      <div class="flex gap-2">
+        <button class="ai-btn" data-answer="Короткие">Короткие</button>
+        <button class="ai-btn" data-answer="Средние">Средние</button>
+        <button class="ai-btn" data-answer="Длинные">Длинные</button>
+      </div>
+    </div>
+
+    <div id="ai-thinking" class="hidden text-gray-500 italic">💭 Думаю над вашим идеальным вариантом...</div>
+
+    <div id="ai-result" class="hidden text-pink-600 font-medium">
+      🎉 Вам подойдёт: Маникюр с покрытием и дизайном – 2000₽
+    </div>
   </div>
 </section>
