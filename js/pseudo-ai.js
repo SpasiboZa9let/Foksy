@@ -124,16 +124,47 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let key in services) {
       if (normalize(key) === text) return { exact: true, name: key };
     }
-    for (let key in services) {
-      if (normalize(key).includes(text) || text.includes(normalize(key))) {
-        return { exact: false, name: key };
+
+    if (text.length >= 3) {
+      for (let key in services) {
+        if (normalize(key).includes(text) || text.includes(normalize(key))) {
+          return { exact: false, name: key };
+        }
       }
     }
+
     return null;
   }
 
   function handleUserInput(message) {
     addMessage("Вы: " + message);
+    const lower = message.toLowerCase();
+
+    // Интенты
+    if (/услуг|что.*делаешь|покажи|есть/i.test(lower)) {
+      addMessage("🦊 Конечно, вот мои услуги 👇");
+      showServiceList();
+      return;
+    }
+
+    if (/расскажи|про/i.test(lower)) {
+      const found = matchService(message);
+      if (found) {
+        addMessage(`🦊 ${services[found.name]}\nЗапишем вас?`);
+        lastIntent = found.name;
+        addFollowupButtons();
+      } else {
+        addMessage("🦊 О чём именно рассказать? Вот список услуг:");
+        showServiceList();
+      }
+      return;
+    }
+
+    if (/хуй|пизд|бляд|еба|сука/i.test(lower)) {
+      addMessage("🦊 Давайте по-доброму — у нас тут красота и уют ✨");
+      return;
+    }
+
     const match = matchService(message);
 
     if (match) {
