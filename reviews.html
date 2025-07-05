@@ -4,77 +4,30 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Отзывы</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background: #fdf6f9;
-      min-height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .reviews-track {
-      display: flex;
-      gap: 1rem;
-      animation: scrollReviews 20s linear infinite;
-      width: max-content;
-    }
-    .review-card {
-      height: 12rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-      cursor: pointer;
-    }
-    .review-card:hover {
-      transform: scale(1.05);
-    }
-    @keyframes scrollReviews {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .paused {
-      animation-play-state: paused;
-    }
-    #fullscreenModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-    }
-    #fullscreenModal.show {
-      display: flex;
-    }
-    #fullscreenImage {
-      max-width: 100%;
-      max-height: 100%;
-      border-radius: 1rem;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
-    }
-  </style>
+  <link rel="stylesheet" href="style/style.css" />
 </head>
-<body>
+<body class="bg-pink-50 min-h-screen flex items-center justify-center p-4">
 
   <div class="w-full max-w-4xl overflow-hidden">
-    <div class="reviews-track" id="reviews-track">
-      <img src="gallery/reviews/1.jpg" class="review-card" />
-      <img src="gallery/reviews/2.jpg" class="review-card" />
-      <img src="gallery/reviews/3.jpg" class="review-card" />
-      <img src="gallery/reviews/4.jpg" class="review-card" />
-      <img src="gallery/reviews/5.jpg" class="review-card" />
+    <div class="reviews-track flex gap-4">
+      <!-- Изображения отзывов -->
+      <img src="gallery/reviews/1.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/2.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/3.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/4.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/5.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/6.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/7.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/8.jpg" class="review-card h-48 rounded-xl shadow" />
+      <img src="gallery/reviews/9.jpg" class="review-card h-48 rounded-xl shadow" />
     </div>
   </div>
 
   <!-- Модалка -->
-  <div id="fullscreenModal">
-    <img id="fullscreenImage" />
+  <div id="fullscreenModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+    <img id="fullscreenImage" class="max-w-full max-h-full rounded-lg shadow-lg" />
   </div>
 
-  <script src="reviews-scroll.js"></script>
+  <script src="js/reviews-scroll.js"></script>
 </body>
 </html>
