@@ -2,10 +2,20 @@
   animation: scrollReviews 20s linear infinite;
   width: max-content;
 }
+
 .reviews-track.paused {
   animation-play-state: paused;
 }
+
 @keyframes scrollReviews {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } /* подгоняется под дублированный контент */
+  100% { transform: translateX(-50%); }
+}
+
+.gallery-img {
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.gallery-img:hover {
+  transform: scale(1.05);
 }
