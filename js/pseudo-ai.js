@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let pendingService = null;
   let lastIntent = null;
+  let lastResponseType = null;
 
   function addMessage(text) {
     if (!chat) return;
@@ -60,7 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showServiceList() {
     clearButtons();
-    addMessage("🦊 Вот список доступных услуг:");
+    if (lastResponseType !== 'serviceList') {
+      addMessage("🦊 Вот список доступных услуг:");
+      lastResponseType = 'serviceList';
+    }
     const container = document.createElement("div");
     container.className = "flex gap-2 flex-wrap";
 
@@ -124,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let key in services) {
       if (normalize(key) === text) return { exact: true, name: key };
     }
-
     if (text.length >= 3) {
       for (let key in services) {
         if (normalize(key).includes(text) || text.includes(normalize(key))) {
@@ -132,7 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     }
-
     return null;
   }
 
@@ -140,109 +142,134 @@ document.addEventListener("DOMContentLoaded", () => {
     addMessage("Вы: " + message);
     const lower = message.toLowerCase().trim();
 
-    // 1. Грубость
     if (/хуй|пизд|бляд|еба|сука|чмо|тупа|пошла/i.test(lower)) {
       addMessage("🦊 Давай по-доброму — у нас тут красота и уют ✨");
+      lastResponseType = 'softWarning';
       return;
     }
 
-    // 2. Приветствия
     if (/^(привет|здравствуй|хай|добрый день|доброе утро|вечер)/i.test(lower)) {
       addMessage(randomResponse([
         "🦊 Привет-привет! Я Фокси 💅 Готова помочь с ноготочками!",
         "🦊 Приветик! Что интересует сегодня — нюд, блёстки или кошачий глаз? 😘",
         "🦊 Салют! Давай выберем что-то стильное вместе 🌈"
       ]));
+      lastResponseType = 'greeting';
       return;
     }
 
-    // 3. Как дела
     if (/как (дела|ты)/i.test(lower)) {
       addMessage(randomResponse([
         "🦊 У меня всё отлично! Только что протестила новый дизайн с лавандой 💜",
         "🦊 Спасибо, что спросил(а)! Настроение — как свежий маникюр ✨",
         "🦊 Всё супер, только кофе опять остыл 😹 А у тебя как день идёт?"
       ]));
+      lastResponseType = 'mood';
       return;
     }
 
-    // 4. Как записаться
     if (/как.*запис|можно.*запис|запиш|записаться/i.test(lower)) {
       addMessage("🦊 Записаться можно прямо сейчас 💬 Жми кнопку ниже 👇");
       addFollowupButtons();
+      lastResponseType = 'booking';
       return;
     }
 
-    // 5. Что ты умеешь
     if (/что.*умеешь|что.*можешь|ты кто|чем.*занимаешься/i.test(lower)) {
       addMessage("🦊 Я могу рассказать про услуги, помочь выбрать дизайн, показать прайс и записать тебя 💅");
       showServiceList();
+      lastResponseType = 'about';
       return;
     }
 
-    // 6. Запрос на услуги
-    if (/услуг|что.*делаешь|покажи|есть|предлагаешь/i.test(lower)) {
-      addMessage("🦊 Конечно, вот мои услуги 👇");
+    if (/помоги|нужна помощь|подскажи/i.test(lower)) {
+      addMessage("🦊 Конечно, я рядом! Могу рассказать про услуги, показать прайс или записать тебя 💅");
       showServiceList();
+      lastResponseType = 'help';
       return;
     }
 
-    // 7. Запрос на "расскажи про..."
+    if (/расскажи что[- ]?нибудь/i.test(lower)) {
+      addMessage(randomResponse([
+        "🦊 Хмм… могу рассказать про летние тренды 💅 Или показать варианты нюда. Что интересно?",
+        "🦊 А давай поговорим про дизайн с блёстками? Или тебе хочется классику сегодня?",
+        "🦊 У меня в голове столько идей… С чего начнём: френч, омбре или роспись кистью?"
+      ]));
+      lastResponseType = 'smalltalk';
+      return;
+    }
+
+    if (/услуг|что.*делаешь|покажи|есть|предлагаешь/i.test(lower)) {
+      if (lastResponseType !== 'serviceList') {
+        addMessage("🦊 Конечно, вот мои услуги 👇");
+        showServiceList();
+        lastResponseType = 'serviceList';
+      }
+      return;
+    }
+
     if (/расскажи|про/i.test(lower)) {
       const found = matchService(message);
       if (found) {
         addMessage(`🦊 ${services[found.name]}\nЗапишем вас?`);
         lastIntent = found.name;
         addFollowupButtons();
+        lastResponseType = 'serviceExact';
       } else {
-        addMessage("🦊 О чём именно рассказать? Вот список услуг:");
-        showServiceList();
+        if (lastResponseType !== 'serviceList') {
+          addMessage("🦊 О чём именно рассказать? Вот список услуг:");
+          showServiceList();
+          lastResponseType = 'serviceList';
+        }
       }
       return;
     }
 
-    // 8. Спасибо
     if (/спасибо|благодар/i.test(lower)) {
       addMessage(randomResponse([
         "🦊 Всегда пожалуйста 💖 Надеюсь, скоро увидимся!",
         "🦊 Обращайся, я тут 24/7 ☕",
         "🦊 Пожалуйста! Идеальные ногти — моя миссия ✨"
       ]));
+      lastResponseType = 'thanks';
       return;
     }
 
-    // 9. Прощание
     if (/пока|до свидания|бай|увидимся|чао/i.test(lower)) {
       addMessage(randomResponse([
         "🦊 Пока-пока! Удачного дня и шикарных ногтей 💖",
         "🦊 До скорого, красотка! 💅",
         "🦊 Обнимаю! До следующего маникюра 🌷"
       ]));
+      lastResponseType = 'bye';
       return;
     }
 
-    // 10. Услуги
     const match = matchService(message);
-
     if (match) {
       if (match.exact) {
         addMessage(`🦊 ${services[match.name]}\nЗапишем вас?`);
         lastIntent = match.name;
         addFollowupButtons();
+        lastResponseType = 'serviceExact';
       } else {
         pendingService = match.name;
-        addMessage(`🦊 Вы имели в виду "${capitalize(match.name)}"?`);
+        addMessage(`🦊 Вы имели в виду \"${capitalize(match.name)}\"?`);
         addInlineConfirmButtons();
+        lastResponseType = 'serviceConfirm';
       }
     } else {
       if (message.length <= 2) {
-        addMessage("🦊 Не совсем поняла... Давай выберем из списка?");
-        showServiceList();
+        if (lastResponseType !== 'serviceList') {
+          addMessage("🦊 Не совсем поняла... Давай выберем из списка?");
+          showServiceList();
+          lastResponseType = 'serviceList';
+        }
         return;
       }
-
       addMessage("🦊 Не совсем поняла... Давай выберем из списка?");
       showServiceList();
+      lastResponseType = 'fallback';
     }
   }
 
@@ -257,6 +284,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     if (chat && chat.childElementCount === 0) {
       addMessage("🦊 Привет, я Фокси. Спроси что-нибудь!");
+      setTimeout(() => {
+        addMessage("🦊 Я могу:\n💅 рассказать про услуги\n💬 помочь выбрать дизайн\n📅 записать тебя\n\nНапиши, например: «комби маникюр» или «хочу записаться» — и я всё сделаю 🧡");
+      }, 3000);
     }
   }, 1000);
 });
