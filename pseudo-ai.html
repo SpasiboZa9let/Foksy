@@ -1,26 +1,45 @@
-<section class="mt-10">
-  <h2 class="text-lg font-semibold text-gray-900 mb-3">Индивидуальная рекомендация</h2>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Рекомендации</title>
+  <link rel="stylesheet" href="style/style.css">
+  <style>
+    .pseudo-wrapper {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .pseudo-q {
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .pseudo-btn {
+      background: #f9f5f7;
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .pseudo-btn:hover {
+      background: #f3e8ef;
+    }
+    .pseudo-result {
+      margin-top: 1rem;
+      font-weight: 600;
+      color: #be185d;
+    }
+  </style>
+</head>
+<body class="p-4 text-gray-800 bg-[#FAF7F9] max-w-md mx-auto">
 
-  <div class="bg-white rounded-2xl p-4 shadow-sm text-sm leading-relaxed text-gray-800 space-y-3">
-    <p id="ai-q1">🤖 Здравствуйте! Вы предпочитаете классику или дизайн?</p>
-    <div id="ai-options-1" class="flex gap-2">
-      <button class="ai-btn" data-answer="Классику">Классику</button>
-      <button class="ai-btn" data-answer="Дизайн">Дизайн</button>
-    </div>
+  <section class="pseudo-wrapper">
+    <div id="pseudo-container"></div>
+  </section>
 
-    <div id="ai-q2-block" class="hidden">
-      <p id="ai-q2">✨ Отлично. А какой длины ногти вам нравятся?</p>
-      <div class="flex gap-2">
-        <button class="ai-btn" data-answer="Короткие">Короткие</button>
-        <button class="ai-btn" data-answer="Средние">Средние</button>
-        <button class="ai-btn" data-answer="Длинные">Длинные</button>
-      </div>
-    </div>
-
-    <div id="ai-thinking" class="hidden text-gray-500 italic">💭 Думаю над вашим идеальным вариантом...</div>
-
-    <div id="ai-result" class="hidden text-pink-600 font-medium">
-      🎉 Вам подойдёт: Маникюр с покрытием и дизайном – 2000₽
-    </div>
-  </div>
-</section>
+  <script src="js/pseudo-ai.js"></script>
+</body>
+</html>
