@@ -1,52 +1,62 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("pseudo-container");
+document.addEventListener("DOMContentLoaded", async () => {
+  const wrapper = document.getElementById("pseudo-ai-wrapper");
+  if (!wrapper) return;
 
-  const questions = [
-    {
-      q: "Нужно покрытие или просто маникюр?",
-      a: [
-        { text: "Покрытие", next: 1 },
-        { text: "Без покрытия", result: "Снятие покрытия — 500₽" }
-      ]
-    },
-    {
-      q: "Хочется сохранить длину или нарастить ногти?",
-      a: [
-        { text: "Сохранить", next: 2 },
-        { text: "Нарастить", result: "Наращивание ногтей — 3000₽" }
-      ]
-    },
-    {
-      q: "Нужен ли дизайн?",
-      a: [
-        { text: "Да", result: "Маникюр с покрытием — 2000₽" },
-        { text: "Нет", result: "Комби маникюр — 1200₽" }
-      ]
+  try {
+    const res = await fetch("pseudo-ai.html");
+    const html = await res.text();
+
+    wrapper.innerHTML = html;
+
+    const chat = document.getElementById("pseudo-ai-chat");
+    const input = document.getElementById("pseudo-ai-input");
+
+    const steps = [
+      { q: "Какой у вас сегодня повод для маникюра?" },
+      { q: "Вам важно, чтобы был дизайн (стразы, френч, втирка)?" },
+      { q: "Нужно ли наращивание или достаточно ухода за своими ногтями?" }
+    ];
+
+    const responses = [];
+    let stepIndex = 0;
+
+    function askNext() {
+      if (stepIndex < steps.length) {
+        const step = steps[stepIndex];
+        chat.innerHTML += `<div class="font-medium">🤖 ${step.q}</div>`;
+        input.value = "";
+        input.focus();
+      } else {
+        const result = getRecommendation(responses);
+        chat.innerHTML += `<div class="font-medium text-pink-500">✨ Рекомендую: ${result}</div>`;
+        input.disabled = true;
+      }
     }
-  ];
 
-  let current = 0;
+    function getRecommendation(responses) {
+      const [occasion, wantsDesign, wantsExtension] = responses.map(x => x.toLowerCase());
 
-  function render(index) {
-    const q = questions[index];
-    container.innerHTML = `
-      <div class="pseudo-q">${q.q}</div>
-      ${q.a.map((ans, i) => `<div class="pseudo-btn" data-id="${i}">${ans.text}</div>`).join("")}
-    `;
+      if (wantsExtension.includes("наращив")) {
+        return "Коррекция длины или Наращивание ногтей — от 2500₽";
+      }
+      if (wantsDesign.includes("да")) {
+        return "Маникюр с покрытием — 2000₽";
+      }
+      return "Комби маникюр — 1200₽";
+    }
 
-    container.querySelectorAll(".pseudo-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const id = parseInt(btn.dataset.id);
-        const answer = q.a[id];
-
-        if (answer.result) {
-          container.innerHTML = `<div class="pseudo-result">${answer.result}</div>`;
-        } else if (typeof answer.next !== "undefined") {
-          render(answer.next);
-        }
-      });
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter" && input.value.trim()) {
+        const answer = input.value.trim();
+        chat.innerHTML += `<div class="text-gray-600">👤 ${answer}</div>`;
+        responses.push(answer);
+        stepIndex++;
+        askNext();
+      }
     });
-  }
 
-  render(current);
+    askNext();
+  } catch (error) {
+    console.error("Не удалось загрузить pseudo-ai.html:", error);
+  }
 });
