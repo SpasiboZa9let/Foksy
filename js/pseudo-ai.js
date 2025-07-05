@@ -11,39 +11,37 @@ document.addEventListener("DOMContentLoaded", () => {
     "снятие покрытия": "Снятие без дальнейшего покрытия — 500₽."
   };
 
-  const politeTriggers = {
-    "привет": "Привет-привет! Я Фокси, ваш помощник 💅",
-    "здравствуй": "Привет-привет! Я Фокси, ваш помощник 💅",
-    "спасибо": "Всегда пожалуйста! Надеюсь, скоро увидимся ✨",
-    "спасиб": "Всегда пожалуйста! Надеюсь, скоро увидимся ✨",
-    "пока": "До встречи! Хорошего дня 🌸",
-    "увидимся": "До встречи! Хорошего дня 🌸",
-    "до свидания": "До встречи! Хорошего дня 🌸",
-    "ты кто": "Я — Фокси. Помогаю выбрать услуги и записаться :)",
-    "что ты умеешь": "Я могу рассказать о маникюре и помочь записаться 🌸",
-    "что ты за бот": "Я — Фокси. Помогаю выбрать услуги и записаться :)"
-  };
-
-  const rudeWords = ["хуй", "пизд", "бляд", "fuck", "shit"];
-
   let pendingService = null;
+  let lastIntent = null;
 
   function addMessage(text) {
+    if (!chat) return;
     const bubble = document.createElement("div");
-    bubble.className = "bg-white p-2 rounded-xl text-sm shadow";
+    bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line";
     bubble.textContent = text;
     chat.appendChild(bubble);
     chat.scrollTop = chat.scrollHeight;
   }
 
+  function clearButtons() {
+    if (!chat) return;
+    const buttons = chat.querySelectorAll("button");
+    buttons.forEach(btn => btn.remove());
+  }
+
   function addFollowupButtons() {
+    clearButtons();
     const container = document.createElement("div");
     container.className = "flex gap-2 flex-wrap";
 
     const btn1 = document.createElement("button");
     btn1.textContent = "👍 Подходит";
     btn1.className = "bg-green-500 text-white px-3 py-1 rounded-xl text-sm";
-    btn1.onclick = () => addMessage("🦊 Отлично! Обращайтесь в любое время.");
+    btn1.onclick = () => addMessage(randomResponse([
+      "🦊 Отлично! Обращайтесь в любое время 💅",
+      "🦊 Прекрасный выбор — до скорой встречи 💖",
+      "🦊 Всё записал. До связи! 🌸"
+    ]));
 
     const btn2 = document.createElement("button");
     btn2.textContent = "❓ Уточнить";
@@ -53,16 +51,33 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn3 = document.createElement("button");
     btn3.textContent = "📅 Записаться";
     btn3.className = "bg-pink-500 text-white px-3 py-1 rounded-xl text-sm";
-    btn3.onclick = () => {
-      window.location.href = "https://t.me/foxold_a";
-    };
+    btn3.onclick = () => window.location.href = "https://t.me/foxold_a";
 
     container.append(btn1, btn2, btn3);
     chat.append(container);
     chat.scrollTop = chat.scrollHeight;
   }
 
+  function showServiceList() {
+    clearButtons();
+    addMessage("🦊 Вот список доступных услуг:");
+    const container = document.createElement("div");
+    container.className = "flex gap-2 flex-wrap";
+
+    Object.keys(services).forEach((key) => {
+      const btn = document.createElement("button");
+      btn.textContent = capitalize(key);
+      btn.className = "bg-gray-200 text-black px-3 py-1 rounded-xl text-sm";
+      btn.onclick = () => handleUserInput(key);
+      container.appendChild(btn);
+    });
+
+    chat.append(container);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
   function addInlineConfirmButtons() {
+    clearButtons();
     const container = document.createElement("div");
     container.className = "flex gap-2";
 
@@ -72,8 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
     btnYes.onclick = () => {
       addMessage("Вы: Да");
       addMessage(`🦊 ${services[pendingService]}\nЗапишем вас?`);
-      addFollowupButtons();
+      lastIntent = pendingService;
       pendingService = null;
+      addFollowupButtons();
     };
 
     const btnNo = document.createElement("button");
@@ -81,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnNo.className = "bg-gray-400 text-white px-3 py-1 rounded-xl text-sm";
     btnNo.onclick = () => {
       addMessage("Вы: Нет");
-      addMessage("🦊 Уточните, пожалуйста, какую услугу вы ищете.");
+      addMessage("🦊 Хорошо, давай попробуем снова.");
       showServiceList();
       pendingService = null;
     };
@@ -92,67 +108,38 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    return text.toLocaleLowerCase().replace(/^./u, ch => ch.toLocaleUpperCase());
+  }
+
+  function normalize(text) {
+    return text.toLowerCase().replace(/[^\w\sа-яё]/gi, "").trim();
+  }
+
+  function randomResponse(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
   }
 
   function matchService(text) {
-    text = text.toLowerCase();
-    if (text.length < 2) return null;
-    for (let name in services) {
-      if (text === name) return { exact: true, name };
-      if (name.includes(text)) return { exact: false, name };
+    text = normalize(text);
+    for (let key in services) {
+      if (normalize(key) === text) return { exact: true, name: key };
+    }
+    for (let key in services) {
+      if (normalize(key).includes(text) || text.includes(normalize(key))) {
+        return { exact: false, name: key };
+      }
     }
     return null;
   }
 
-  function showServiceList() {
-    const container = document.createElement("div");
-    container.className = "flex flex-col space-y-1";
-    addMessage("🦊 Вот список доступных услуг:");
-    for (let name in services) {
-      const btn = document.createElement("button");
-      btn.className = "bg-pink-100 text-pink-800 px-3 py-1 rounded-xl text-sm text-left hover:bg-pink-200";
-      btn.textContent = capitalize(name);
-      btn.onclick = () => {
-        addMessage(`Вы: ${capitalize(name)}`);
-        addMessage(`🦊 ${services[name]}\nЗапишем вас?`);
-        addFollowupButtons();
-      };
-      container.appendChild(btn);
-    }
-    chat.append(container);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const message = input.value.trim();
-    if (!message) return;
-
+  function handleUserInput(message) {
     addMessage("Вы: " + message);
-    input.value = "";
+    const match = matchService(message);
 
-    const clean = message.toLowerCase();
-
-    // 1. Ругательства
-    if (rudeWords.some(w => clean.includes(w))) {
-      addMessage("🦊 Пожалуйста, давайте без грубостей 🙈");
-      return;
-    }
-
-    // 2. Вежливые фразы
-    for (let key in politeTriggers) {
-      if (clean.includes(key.toLowerCase())) {
-        addMessage(`🦊 ${politeTriggers[key]}`);
-        return;
-      }
-    }
-
-    // 3. Услуги
-    const match = matchService(clean);
     if (match) {
       if (match.exact) {
         addMessage(`🦊 ${services[match.name]}\nЗапишем вас?`);
+        lastIntent = match.name;
         addFollowupButtons();
       } else {
         pendingService = match.name;
@@ -160,11 +147,32 @@ document.addEventListener("DOMContentLoaded", () => {
         addInlineConfirmButtons();
       }
     } else {
-      addMessage("🦊 Уточните, пожалуйста, что вы имеете в виду?");
-      showServiceList();
+      if (/спасибо/i.test(message)) {
+        addMessage(randomResponse([
+          "🦊 Всегда пожалуйста! Надеюсь, скоро увидимся ✨",
+          "🦊 Обращайся, рада помочь 🌷"
+        ]));
+      } else if (/пока|до свидания|бай/i.test(message)) {
+        addMessage("🦊 Пока-пока! Удачного дня и шикарных ногтей 💖");
+      } else {
+        addMessage("🦊 Не совсем поняла... Давай выберем из списка?");
+        showServiceList();
+      }
     }
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const message = input.value.trim();
+    if (!message) return;
+    input.value = "";
+    handleUserInput(message);
   });
 
-  // Приветствие
-  addMessage("🦊 Привет, я Фокси. Спроси что-нибудь!");
+  // приветствие через таймер (если тишина)
+  setTimeout(() => {
+    if (chat && chat.childElementCount === 0) {
+      addMessage("🦊 Привет, я Фокси. Спроси что-нибудь!");
+    }
+  }, 1000);
 });
