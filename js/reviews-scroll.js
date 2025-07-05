@@ -1,45 +1,32 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const wrapper = document.getElementById("reviews-wrapper");
-  if (!wrapper) return;
+document.addEventListener("DOMContentLoaded", () => {
+  const track = document.querySelector(".reviews-track");
+  if (!track) return;
 
-  // Загружаем содержимое reviews.html
-  const res = await fetch("reviews.html");
-  const html = await res.text();
-  const temp = document.createElement("div");
-  temp.innerHTML = html;
+  // Дублируем изображения для бесконечного скролла
+  const imgs = Array.from(track.querySelectorAll(".review-card"));
+  imgs.forEach(img => {
+    const clone = img.cloneNode(true);
+    track.appendChild(clone);
+  });
 
-  // Извлекаем нужные изображения
-  const reviewImages = temp.querySelectorAll(".review-card");
-  const track = document.createElement("div");
-  track.classList.add("reviews-track", "flex", "space-x-4");
+  // Обработчики клика по каждой карточке
+  const modal = document.getElementById("fullscreenModal");
+  const modalImg = document.getElementById("fullscreenImage");
 
-  reviewImages.forEach(img => {
-    const clone1 = img.cloneNode(true);
-    const clone2 = img.cloneNode(true);
-    track.appendChild(clone1);
-    track.appendChild(clone2);
-
-    // Добавляем обработчик клика
-    [clone1, clone2].forEach(clone => {
-      clone.addEventListener("click", () => {
-        const modal = document.getElementById("fullscreenModal");
-        const modalImg = document.getElementById("fullscreenImage");
-        modal.classList.remove("hidden");
-        modalImg.src = clone.src;
-      });
+  track.querySelectorAll(".review-card").forEach(img => {
+    img.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+      modalImg.src = img.src;
     });
   });
 
-  wrapper.appendChild(track);
-
-  // Скрытие по клику вне
-  const modal = document.getElementById("fullscreenModal");
+  // Закрытие модального окна по клику
   modal.addEventListener("click", () => {
     modal.classList.add("hidden");
-    document.getElementById("fullscreenImage").src = "";
+    modalImg.src = "";
   });
 
-  // Авто-пауза
+  // Авто-пауза при удержании или тапе
   let pauseTimeout;
   track.addEventListener("pointerdown", () => {
     track.classList.add("paused");
