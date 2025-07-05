@@ -80,3 +80,26 @@
   max-height: 200px;
   opacity: 1;
 }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-overlay.hidden {
+  display: none;
+}
+
+.modal-content img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  background: white;
+  padding: 0.5rem;
+}
+
