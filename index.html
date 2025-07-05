@@ -61,10 +61,12 @@
     </div>
   </section>
 
-  <!-- Reviews (loaded from external file) -->
+  <!-- Reviews -->
   <section class="mt-10">
     <h2 class="text-lg font-semibold text-gray-900 mb-3" style="animation:fadeUp .8s forwards 1s;opacity:0;">Отзывы</h2>
-    <div id="reviews-container"></div>
+    <div id="reviews-wrapper" class="overflow-hidden relative" style="animation:blurIn .8s forwards 1.1s;opacity:0;">
+      <!-- Отзывы подгружаются динамически -->
+    </div>
   </section>
 
   <!-- Gallery -->
@@ -85,13 +87,8 @@
 
   <script>
     lucide.createIcons();
-
-    fetch('reviews.html')
-      .then(res => res.text())
-      .then(html => {
-        document.getElementById('reviews-container').innerHTML = html;
-      });
   </script>
   <script src="js/modal.js"></script>
+  <script src="js/reviews-scroll.js"></script>
 </body>
 </html>
