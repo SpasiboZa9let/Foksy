@@ -19,3 +19,7 @@
 .gallery-img:hover {
   transform: scale(1.05);
 }
+.ai-btn {
+  @apply bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-pink-200 transition;
+  cursor: pointer;
+}
