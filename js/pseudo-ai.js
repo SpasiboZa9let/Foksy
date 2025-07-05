@@ -236,17 +236,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Примеры дизайна / Pinterest
-    if (/(пример.*дизайн|дизайн.*пример|помог.*дизайн|помощь.*дизайн)/i.test(lower)) {
-      addMessage(
-        "🦊 Лови свежие идеи дизайна 👉 " +
-        '<a href="https://ru.pinterest.com/foksynails/дизайн/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" ' +
-        'target="_blank" class="text-pink-600 underline">смотреть на Pinterest</a>',
-        true
-      );
-      lastResponseType = "designIdeas";
-      addFollowupButtons();
-      return;
-    }
+    // ─── Примеры дизайна / идеи ───
+if (/(?:пример.*дизайн|дизайн.*пример|помог.*дизайн|помощь.*дизайн|\bдизайн\b)/i.test(lower)) {
+  addMessage(
+    '🦊 Лови свежие идеи дизайна 👉 ' +
+    '<a href="https://ru.pinterest.com/foksynails/%D0%B4%D0%B8%D0%B7%D0%B0%D0%B9%D0%BD/?invite_code=be24647141714804b78fe8d043c1d5bf&sender=918171580188790185" ' +
+    'target="_blank" class="text-pink-600 underline">смотреть на Pinterest</a>',
+    true
+  );
+  lastResponseType = 'designIdeas';
+  addFollowupButtons();
+  return;
+}
+
 
     // Помощь
     if (/помоги|нужна помощь|подскажи/i.test(lower)) {
