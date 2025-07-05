@@ -2,21 +2,30 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Отзывы</title>
-  <link rel="stylesheet" href="style/style.css" />
-  <script src="js/reviews-scroll.js" defer></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Отзывы клиентов</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="scroll-container">
-    <img src="gallery/reviews/1.jpg" class="review-card" alt="Отзыв 1" />
-    <img src="gallery/reviews/2.jpg" class="review-card" alt="Отзыв 2" />
-    <img src="gallery/reviews/3.jpg" class="review-card" alt="Отзыв 3" />
-    <img src="gallery/reviews/4.jpg" class="review-card" alt="Отзыв 4" />
-    <img src="gallery/reviews/5.jpg" class="review-card" alt="Отзыв 5" />
-    <img src="gallery/reviews/6.jpg" class="review-card" alt="Отзыв 6" />
-    <img src="gallery/reviews/7.jpg" class="review-card" alt="Отзыв 7" />
-    <img src="gallery/reviews/8.jpg" class="review-card" alt="Отзыв 8" />
-    <img src="gallery/reviews/9.jpg" class="review-card" alt="Отзыв 9" />
-  </div>
+  <section class="reviews-wrapper">
+    <div class="reviews-track" id="reviewsTrack">
+      <!-- Подставь нужное количество скриншотов -->
+      <img src="gallery/reviews/1.jpg" class="review-card" />
+      <img src="gallery/reviews/2.jpg" class="review-card" />
+      <img src="gallery/reviews/3.jpg" class="review-card" />
+      <img src="gallery/reviews/4.jpg" class="review-card" />
+      <img src="gallery/reviews/5.jpg" class="review-card" />
+      <img src="gallery/reviews/6.jpg" class="review-card" />
+      <!-- Можно дублировать для бесконечного скролла -->
+      <img src="gallery/reviews/1.jpg" class="review-card" />
+      <img src="gallery/reviews/2.jpg" class="review-card" />
+      <img src="gallery/reviews/3.jpg" class="review-card" />
+      <img src="gallery/reviews/4.jpg" class="review-card" />
+      <img src="gallery/reviews/5.jpg" class="review-card" />
+      <img src="gallery/reviews/6.jpg" class="review-card" />
+    </div>
+  </section>
+
+  <script src="reviews-scroll.js"></script>
 </body>
 </html>
