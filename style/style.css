@@ -1,5 +1,14 @@
+/* === Отзывы: горизонтальная галерея скринов === */
+.reviews-wrapper {
+  overflow: hidden;
+  width: 100%;
+  padding: 20px 0;
+}
+
 .reviews-track {
-  animation: scrollReviews 20s linear infinite;
+  display: flex;
+  gap: 20px;
+  animation: scrollReviews 60s linear infinite;
   width: max-content;
 }
 
@@ -7,22 +16,46 @@
   animation-play-state: paused;
 }
 
-@keyframes scrollReviews {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-.gallery-img {
+.review-card {
+  flex: 0 0 auto;
+  width: 240px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  object-fit: cover;
   transition: transform 0.3s ease;
   cursor: pointer;
 }
-.gallery-img:hover {
+
+.review-card:hover {
   transform: scale(1.05);
 }
+
+@keyframes scrollReviews {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* === UI и кнопки === */
 .ai-btn {
-  @apply bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-pink-200 transition;
+  background-color: #fce4ec;
+  color: #d81b60;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: background 0.3s;
   cursor: pointer;
 }
+
+.ai-btn:hover {
+  background-color: #f8bbd0;
+}
+
 .service-item {
   background: white;
   border-radius: 1rem;
