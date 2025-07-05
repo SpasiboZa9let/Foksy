@@ -1,34 +1,31 @@
-// Вертикальная карусель отзывов (круглые изображения)
-document.addEventListener("DOMContentLoaded", async () => {
-  const wrapper = document.getElementById("reviews-wrapper");
+/* Горизонтальная бесконечная карусель отзывов */
+document.addEventListener('DOMContentLoaded', async () => {
+  const wrapper = document.getElementById('reviews-wrapper');
   if (!wrapper) return;
 
-  /* Загружаем HTML-шаблон с девятью <img> — см. reviews.html */
-  const res  = await fetch("reviews.html");
+  /* 1. Загружаем фрагмент с 9 картинками */
+  const res  = await fetch('reviews.html');
   const html = await res.text();
 
-  /* Создаём дорожку и дублируем содержимое для бесконечного цикла */
-  const track = document.createElement("div");
-  track.classList.add("reviews-track", "flex", "flex-col", "items-center");
-  track.innerHTML = html + html;          // дублирование = «лента по кругу»
+  /* 2. Создаём трек и дублируем содержимое, чтобы анимация была бесконечной */
+  const track = document.createElement('div');
+  track.classList.add('reviews-track', 'flex', 'items-center');
+  track.innerHTML = html + html;          // удвоение = «лента по кругу»
   wrapper.appendChild(track);
 
-  /* Пауза на 3 с при удержании пальцем/мышью */
-  let pauseTimeout;
-  track.addEventListener("pointerdown", () => {
-    track.classList.add("paused");
-    clearTimeout(pauseTimeout);
-    pauseTimeout = setTimeout(() => track.classList.remove("paused"), 3000);
-  });
+  /* 3. Пауза при наведении/таче */
+  track.addEventListener('pointerenter', () => track.classList.add('paused'));
+  track.addEventListener('pointerleave', () => track.classList.remove('paused'));
+  track.addEventListener('pointerdown',  () => track.classList.add('paused'));
+  track.addEventListener('pointerup',    () => track.classList.remove('paused'));
 
-  /* Клик/тап по изображению — полноразмерный просмотр */
-  track.addEventListener("click", (e) => {
-    const img = e.target.closest("img");
+  /* 4. Клик по кругу — полноэкранный просмотр */
+  track.addEventListener('click', (e) => {
+    const img = e.target.closest('img');
     if (!img) return;
 
-    const overlay = document.createElement("div");
-    overlay.className =
-      "fixed inset-0 bg-black/80 z-50 grid place-items-center";
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 bg-black/80 z-50 grid place-items-center';
 
     overlay.innerHTML = `
       <img src="${img.src}" alt="${img.alt}"
@@ -39,12 +36,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.body.appendChild(overlay);
 
     const close = () => overlay.remove();
-    overlay.addEventListener("click", (ev) => {
-      if (ev.target === overlay || ev.target.tagName === "BUTTON") close();
+
+    overlay.addEventListener('click', ev => {
+      if (ev.target === overlay || ev.target.tagName === 'BUTTON') close();
     });
-    /* Закрытие по ESC */
-    document.addEventListener("keydown", function esc(ev) {
-      if (ev.key === "Escape") { close(); document.removeEventListener("keydown", esc); }
+
+    /* Закрытие по Escape */
+    document.addEventListener('keydown', function esc(ev) {
+      if (ev.key === 'Escape') { close(); document.removeEventListener('keydown', esc); }
     });
   });
 });
