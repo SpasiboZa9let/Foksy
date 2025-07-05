@@ -1,14 +1,5 @@
-/* === Отзывы: горизонтальная галерея скринов === */
-.reviews-wrapper {
-  overflow: hidden;
-  width: 100%;
-  padding: 20px 0;
-}
-
 .reviews-track {
-  display: flex;
-  gap: 20px;
-  animation: scrollReviews 60s linear infinite;
+  animation: scrollReviews 20s linear infinite;
   width: max-content;
 }
 
@@ -16,46 +7,22 @@
   animation-play-state: paused;
 }
 
-.review-card {
-  flex: 0 0 auto;
-  width: 240px;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  object-fit: cover;
+@keyframes scrollReviews {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.gallery-img {
   transition: transform 0.3s ease;
   cursor: pointer;
 }
-
-.review-card:hover {
+.gallery-img:hover {
   transform: scale(1.05);
 }
-
-@keyframes scrollReviews {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* === UI и кнопки === */
 .ai-btn {
-  background-color: #fce4ec;
-  color: #d81b60;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  transition: background 0.3s;
+  @apply bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-pink-200 transition;
   cursor: pointer;
 }
-
-.ai-btn:hover {
-  background-color: #f8bbd0;
-}
-
 .service-item {
   background: white;
   border-radius: 1rem;
@@ -80,30 +47,3 @@
   max-height: 200px;
   opacity: 1;
 }
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.modal-overlay.hidden {
-  display: none;
-}
-
-.modal-content img {
-  max-width: 90vw;
-  max-height: 90vh;
-  border-radius: 1rem;
-  box-shadow: 0 0 20px rgba(0,0,0,0.4);
-  background: white;
-  padding: 0.5rem;
-}
-#fullscreenModal {
-  backdrop-filter: blur(4px);
-  transition: opacity 0.3s ease;
-}
-
