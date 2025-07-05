@@ -38,3 +38,20 @@ document.querySelectorAll(".review-card").forEach(img => {
 document.getElementById("modalOverlay").addEventListener("click", () => {
   document.getElementById("modalOverlay").classList.add("hidden");
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("fullscreenModal");
+  const modalImg = document.getElementById("fullscreenImage");
+
+  document.querySelectorAll(".review-card").forEach(img => {
+    img.addEventListener("click", () => {
+      modal.classList.remove("hidden");
+      modalImg.src = img.src;
+    });
+  });
+
+  modal.addEventListener("click", () => {
+    modal.classList.add("hidden");
+    modalImg.src = "";
+  });
+});
+
