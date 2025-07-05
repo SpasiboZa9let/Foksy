@@ -2,46 +2,53 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Мастер Маникюра</title>
 
+  <!-- шрифты ------------------------------------------------------------ -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CDN + lucide -------------------------------------------- -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <!-- кастомные стили проекта ------------------------------------------ -->
   <link rel="stylesheet" href="style/style.css" />
 
+  <!-- локальные анимации (оставил как были) ---------------------------- -->
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    h2, .lux {
-      font-family: 'Playfair Display', serif;
-    }
+    body { font-family: 'Inter', sans-serif; }
+    h2, .lux { font-family: 'Playfair Display', serif; }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+      to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes slideIn {
       from { opacity: 0; transform: translateX(24px); }
-      to { opacity: 1; transform: translateX(0); }
+      to   { opacity: 1; transform: translateX(0); }
     }
     @keyframes blurIn {
       from { opacity: 0; filter: blur(6px); }
-      to { opacity: 1; filter: blur(0); }
+      to   { opacity: 1; filter: blur(0); }
     }
   </style>
 </head>
 
 <body class="bg-[#FAF7F9] text-gray-800 antialiased tracking-tight max-w-md mx-auto p-4">
 
-  <!-- Hero -->
+  <!-- Hero -------------------------------------------------------------- -->
   <section class="flex flex-col items-center text-center">
-    <div class="w-32 h-32 rounded-full shadow-md ring-4 ring-pink-100 overflow-hidden" style="animation:fadeUp .8s forwards .1s;opacity:0;">
+    <div class="w-32 h-32 rounded-full shadow-md ring-4 ring-pink-100 overflow-hidden"
+         style="animation:fadeUp .8s forwards .1s;opacity:0;">
       <img src="gallery/avatar/avatar.jpg" alt="Фото мастера" class="w-full h-full object-cover" />
     </div>
 
-    <h1 class="mt-4 text-2xl font-semibold text-gray-900 lux" style="animation:fadeUp .8s forwards .25s;opacity:0;">Анна&nbsp;Фоксольд</h1>
-    <p class="mt-2 text-sm text-gray-600 leading-relaxed px-6" style="animation:fadeUp .8s forwards .35s;opacity:0;">
+    <h1 class="mt-4 text-2xl font-semibold text-gray-900 lux"
+        style="animation:fadeUp .8s forwards .25s;opacity:0;">Анна&nbsp;Фоксольд</h1>
+
+    <p class="mt-2 text-sm text-gray-600 leading-relaxed px-6"
+       style="animation:fadeUp .8s forwards .35s;opacity:0;">
       Сертифицированный мастер маникюра. Забочусь о красоте и здоровье ваших ногтей — с вниманием, теплом и точностью.
     </p>
 
@@ -52,115 +59,138 @@
     </a>
   </section>
 
-  <!-- Pseudo AI -->
-<section class="mt-10">
-  <div class="bg-[#fff0f4] p-4 rounded-2xl shadow-sm">
-    <h2 class="text-lg font-semibold mb-3 text-pink-600">Спроси у Фокси</h2>
-    <div id="pseudo-chat" class="flex flex-col space-y-2 max-h-64 overflow-y-auto mb-3"></div>
-    <form id="pseudo-form" class="flex space-x-2">
-      <input id="pseudo-input" type="text" placeholder="Ваш ответ..." class="flex-1 rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300"/>
-      <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-pink-600">Ок</button>
-    </form>
-    <div id="pseudo-reactions" class="mt-3 flex flex-wrap gap-2 text-sm text-pink-600 font-medium"></div>
-  </div>
-</section>
-  <div id="pseudo-ai-wrapper"></div>
- 
-  <!-- Services -->
+  <!-- Pseudo-AI --------------------------------------------------------- -->
   <section class="mt-10">
-  <h2 class="text-lg font-semibold text-gray-900 mb-4">Прайс</h2>
+    <div class="bg-[#fff0f4] p-4 rounded-2xl shadow-sm">
+      <h2 class="text-lg font-semibold mb-3 text-pink-600">Спроси у Фокси</h2>
 
-  <div class="space-y-4">
-    <div class="service-item" onclick="toggleService(this)">
-      <div class="font-semibold">Комби маникюр</div>
-      <div class="service-details text-sm mt-2 text-gray-700">
-        Снятие + комби-маникюр<br>Цена: <strong>1200₽</strong>
-      </div>
+      <div id="pseudo-chat" class="flex flex-col space-y-2 max-h-64 overflow-y-auto mb-3"></div>
+
+      <form id="pseudo-form" class="flex space-x-2">
+        <input id="pseudo-input" type="text" placeholder="Ваш ответ..."
+               class="flex-1 rounded-xl border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-pink-300" />
+        <button type="submit"
+                class="bg-pink-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-pink-600">
+          Ок
+        </button>
+      </form>
+
+      <div id="pseudo-reactions" class="mt-3 flex flex-wrap gap-2 text-sm text-pink-600 font-medium"></div>
     </div>
-
-    <div class="service-item" onclick="toggleService(this)">
-      <div class="font-semibold">Маникюр с покрытием</div>
-      <div class="service-details text-sm mt-2 text-gray-700">
-        Снятие + комби + укрепление (средние ногти) + дизайн (френч, втирка, стразы, наклейки)<br>
-        Цена: <strong>2000₽</strong>
-      </div>
-    </div>
-
-    <div class="service-item" onclick="toggleService(this)">
-      <div class="font-semibold">Коррекция длины</div>
-      <div class="service-details text-sm mt-2 text-gray-700">
-        Снятие + комби + наращивание + дизайн (френч, втирка, стразы, наклейки)<br>
-        Цена: <strong>2500₽</strong>
-      </div>
-    </div>
-
-    <div class="service-item" onclick="toggleService(this)">
-      <div class="font-semibold">Наращивание ногтей</div>
-      <div class="service-details text-sm mt-2 text-gray-700">
-        Полный комплекс + индивидуальный дизайн<br>
-        Цена: <strong>3000₽</strong>
-      </div>
-    </div>
-
-    <div class="service-item" onclick="toggleService(this)">
-      <div class="font-semibold">Снятие покрытия</div>
-      <div class="service-details text-sm mt-2 text-gray-700">
-        Без дальнейшего покрытия<br>
-        Цена: <strong>500₽</strong>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <!-- Reviews Carousel -->
-  <section class="mt-10">
-    <h2 class="text-lg font-semibold text-gray-900 mb-3 lux" style="animation:fadeUp .8s forwards 1s;opacity:0;">Отзывы</h2>
-    <div id="reviews-wrapper" class="overflow-hidden"></div>
   </section>
 
-  <!-- Gallery -->
+  <!-- Services ---------------------------------------------------------- -->
+  <section class="mt-10">
+    <h2 class="text-lg font-semibold text-gray-900 mb-4">Прайс</h2>
+
+    <div class="space-y-4">
+      <div class="service-item" onclick="toggleService(this)">
+        <div class="font-semibold">Комби маникюр</div>
+        <div class="service-details text-sm mt-2 text-gray-700">
+          Снятие + комби-маникюр<br>Цена: <strong>1200₽</strong>
+        </div>
+      </div>
+
+      <div class="service-item" onclick="toggleService(this)">
+        <div class="font-semibold">Маникюр с покрытием</div>
+        <div class="service-details text-sm mt-2 text-gray-700">
+          Снятие + комби + укрепление (средние ногти) + дизайн (френч, втирка, стразы, наклейки)<br>
+          Цена: <strong>2000₽</strong>
+        </div>
+      </div>
+
+      <div class="service-item" onclick="toggleService(this)">
+        <div class="font-semibold">Коррекция длины</div>
+        <div class="service-details text-sm mt-2 text-gray-700">
+          Снятие + комби + наращивание + дизайн (френч, втирка, стразы, наклейки)<br>
+          Цена: <strong>2500₽</strong>
+        </div>
+      </div>
+
+      <div class="service-item" onclick="toggleService(this)">
+        <div class="font-semibold">Наращивание ногтей</div>
+        <div class="service-details text-sm mt-2 text-gray-700">
+          Полный комплекс + индивидуальный дизайн<br>
+          Цена: <strong>3000₽</strong>
+        </div>
+      </div>
+
+      <div class="service-item" onclick="toggleService(this)">
+        <div class="font-semibold">Снятие покрытия</div>
+        <div class="service-details text-sm mt-2 text-gray-700">
+          Без дальнейшего покрытия<br>
+          Цена: <strong>500₽</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reviews – новая карусель ---------------------------------------- -->
+  <section class="mt-10">
+    <h2 class="text-lg font-semibold text-gray-900 mb-3 lux"
+        style="animation:fadeUp .8s forwards 1s;opacity:0;">Отзывы</h2>
+
+    <!-- JS сам наполнит этот контейнер и включит анимацию -->
+    <div id="reviews-wrapper"></div>
+  </section>
+
+  <!-- Gallery ----------------------------------------------------------- -->
   <section class="mt-10 mb-6">
-    <h2 class="text-lg font-semibold text-gray-900 mb-3 lux" style="animation:fadeUp .8s forwards 1.2s;opacity:0;">Галерея</h2>
+    <h2 class="text-lg font-semibold text-gray-900 mb-3 lux"
+        style="animation:fadeUp .8s forwards 1.2s;opacity:0;">Галерея</h2>
+
     <div class="grid grid-cols-3 gap-2">
-      <img src="gallery/1.jpg" alt="Ногти 1" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/2.jpg" alt="Ногти 2" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/3.jpg" alt="Ногти 3" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/4.jpg" alt="Ногти 4" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/5.jpg" alt="Ногти 5" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/6.jpg" alt="Ногти 6" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/7.jpg" alt="Ногти 7" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
-      <img src="gallery/8.jpg" alt="Ногти 8" class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/1.jpg" alt="Ногти 1"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/2.jpg" alt="Ногти 2"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/3.jpg" alt="Ногти 3"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/4.jpg" alt="Ногти 4"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/5.jpg" alt="Ногти 5"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/6.jpg" alt="Ногти 6"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/7.jpg" alt="Ногти 7"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
+      <img src="gallery/8.jpg" alt="Ногти 8"
+           class="gallery-img w-full h-24 object-cover rounded-xl shadow-sm" />
     </div>
   </section>
 
-  <!-- Map -->
+  <!-- Map --------------------------------------------------------------- -->
   <section class="mt-10 mb-6">
     <h2 class="text-lg font-semibold text-gray-900 mb-3 lux">Как найти</h2>
+
     <div class="w-full rounded-xl overflow-hidden shadow-sm">
       <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Aa4363f5e433d4141977c59310cdd52b34d5ecac8605bbf0baaa63348dae2e7ca&amp;source=constructor"
               width="100%" height="300" frameborder="0" style="border:0;" allowfullscreen></iframe>
     </div>
+
     <a href="https://yandex.ru/maps/?text=Октябрьская%2017а%20209%20Ухта" target="_blank"
        class="block mt-4 text-sm text-pink-500 text-center underline hover:text-pink-600 transition">
       Открыть в Яндекс.Картах
     </a>
   </section>
 
+  <!-- Скрипты ----------------------------------------------------------- -->
   <script>
     lucide.createIcons();
   </script>
-  <script src="js/modal.js"></script>
-  <script src="js/reviews-scroll.js"></script>
-  <script src="js/pseudo-ai.js"></script>
-  <script>
-  function toggleService(el) {
-    const allItems = document.querySelectorAll('.service-item');
-    allItems.forEach(item => {
-      if (item !== el) item.classList.remove('active');
-    });
-    el.classList.toggle('active');
-  }
-</script>
+  <script src="js/modal.js" defer></script>
+  <script src="js/reviews-scroll.js" defer></script>
+  <script src="js/pseudo-ai.js" defer></script>
 
+  <script>
+    /* раскрытие аккордеона прайса */
+    function toggleService(el) {
+      const allItems = document.querySelectorAll('.service-item');
+      allItems.forEach(item => {
+        if (item !== el) item.classList.remove('active');
+      });
+      el.classList.toggle('active');
+    }
+  </script>
 </body>
 </html>
