@@ -102,4 +102,8 @@
   background: white;
   padding: 0.5rem;
 }
+#fullscreenModal {
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease;
+}
 
