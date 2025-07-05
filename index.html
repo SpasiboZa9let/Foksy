@@ -61,10 +61,10 @@
     </div>
   </section>
 
-  <!-- Reviews Section (dynamic load) -->
+  <!-- Reviews (loaded from external file) -->
   <section class="mt-10">
     <h2 class="text-lg font-semibold text-gray-900 mb-3" style="animation:fadeUp .8s forwards 1s;opacity:0;">Отзывы</h2>
-    <div id="reviews-container" style="animation:blurIn .8s forwards 1.1s;opacity:0;"></div>
+    <div id="reviews-container"></div>
   </section>
 
   <!-- Gallery -->
@@ -90,8 +90,7 @@
       .then(res => res.text())
       .then(html => {
         document.getElementById('reviews-container').innerHTML = html;
-      })
-      .catch(err => console.error('Ошибка загрузки отзывов:', err));
+      });
   </script>
   <script src="js/modal.js"></script>
 </body>
