@@ -1,77 +1,72 @@
 /* -----------------------------------------------------------
-   Карусель отзывов (вертикальная): круглые картинки + оверлей
+   ГОРИЗОНТАЛЬНАЯ карусель отзывов
 ----------------------------------------------------------- */
 :root {
-  /* Диаметр «аватара» отзыва */
-  --review-size: 6rem;          /* 96 px — меняйте при желании */
+  /* Диаметр кружка-отзыва (одновременно высота wrapper’а) */
+  --review-size: 6rem;          /* 96 px – меняйте при желании */
 }
 
-/* Обёртка, в которую вставляется дорожка с отзывами                */
-/* Высота рассчитана на 3 «круга» + зазор; overflow скрывает лишнее */
+/* Обёртка секции. Ширина тянется на 100 %, высота = 1 кружок. */
 #reviews-wrapper {
-  height: calc(var(--review-size) * 3 + 2.5rem);
+  height: var(--review-size);
   overflow: hidden;
   position: relative;
 }
 
-/* Лента, которую генерирует JS */
+/* «Дорожка», которую создаёт JS */
 .reviews-track {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1rem;                    /* расстояние между кругами */
   animation: scrollReviews 30s linear infinite;
 }
-.reviews-track.paused {
-  animation-play-state: paused;
-}
+.reviews-track.paused { animation-play-state: paused; }
 
-/* Бесконечный вертикальный подъём (-50 % — потому что дублируем HTML) */
+/* Бесконечный левый скролл (-50 % ⇒ контент продублирован) */
 @keyframes scrollReviews {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-/* Изображения-отзывы (круги) */
+/* Картинки-отзывы (круги) */
 .review-img {
   width:  var(--review-size);
   height: var(--review-size);
   border-radius: 9999px;
   object-fit: cover;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform .3s ease;
 }
 .review-img:hover { transform: scale(1.05); }
 
 /* -----------------------------------------------------------
-   — ДАЛЕЕ: стили из вашего исходного style.css —
-   (оставил без изменений – на случай,
-   если ими пользуются другие блоки сайта)
+   — Остальной ваш исходный CSS (не менялся) —
 ----------------------------------------------------------- */
 .gallery-img {
-  transition: transform 0.3s ease;
+  transition: transform .3s ease;
   cursor: pointer;
 }
-.gallery-img:hover {
-  transform: scale(1.05);
-}
+.gallery-img:hover { transform: scale(1.05); }
+
 .ai-btn {
   @apply bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-pink-200 transition;
   cursor: pointer;
 }
+
 .service-item {
-  background: white;
+  background: #fff;
   border-radius: 1rem;
   padding: 1rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 4px rgba(0,0,0,.05);
   cursor: pointer;
-  transition: background 0.3s;
+  transition: background .3s;
 }
 .service-item:hover { background: #fdf6f9; }
+
 .service-details {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.5s ease, opacity 0.3s ease;
+  transition: max-height .5s ease, opacity .3s ease;
   opacity: 0;
 }
 .service-item.active .service-details {
