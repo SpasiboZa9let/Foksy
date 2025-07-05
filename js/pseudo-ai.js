@@ -1,5 +1,4 @@
-// === Pseudo-AI script with enhanced Foxy logic ===
-
+<script>
 document.addEventListener("DOMContentLoaded", () => {
   const chat = document.getElementById("pseudo-chat");
   const form = document.getElementById("pseudo-form");
@@ -24,14 +23,23 @@ document.addEventListener("DOMContentLoaded", () => {
     chat.scrollTop = chat.scrollHeight;
   }
 
+  function clearButtons() {
+    chat.querySelectorAll("button").forEach(btn => btn.remove());
+  }
+
   function addFollowupButtons() {
+    clearButtons();
     const container = document.createElement("div");
     container.className = "flex gap-2 flex-wrap";
 
     const btn1 = document.createElement("button");
     btn1.textContent = "👍 Подходит";
     btn1.className = "bg-green-500 text-white px-3 py-1 rounded-xl text-sm";
-    btn1.onclick = () => addMessage("🦊 Отлично! Обращайтесь в любое время 💅");
+    btn1.onclick = () => addMessage(randomResponse([
+      "🦊 Отлично! Обращайтесь в любое время 💅",
+      "🦊 Прекрасный выбор — до скорой встречи 💖",
+      "🦊 Всё записал. До связи! 🌸"
+    ]));
 
     const btn2 = document.createElement("button");
     btn2.textContent = "❓ Уточнить";
@@ -41,9 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn3 = document.createElement("button");
     btn3.textContent = "📅 Записаться";
     btn3.className = "bg-pink-500 text-white px-3 py-1 rounded-xl text-sm";
-    btn3.onclick = () => {
-      window.location.href = "https://t.me/foxold_a";
-    };
+    btn3.onclick = () => window.location.href = "https://t.me/foxold_a";
 
     container.append(btn1, btn2, btn3);
     chat.append(container);
@@ -51,9 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showServiceList() {
+    clearButtons();
+    addMessage("🦊 Вот список доступных услуг:");
     const container = document.createElement("div");
     container.className = "flex gap-2 flex-wrap";
-    addMessage("🦊 Вот список доступных услуг:");
 
     Object.keys(services).forEach((key) => {
       const btn = document.createElement("button");
@@ -68,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addInlineConfirmButtons() {
+    clearButtons();
     const container = document.createElement("div");
     container.className = "flex gap-2";
 
@@ -87,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnNo.className = "bg-gray-400 text-white px-3 py-1 rounded-xl text-sm";
     btnNo.onclick = () => {
       addMessage("Вы: Нет");
-      addMessage("🦊 Уточните, пожалуйста, какую услугу вы ищете.");
+      addMessage("🦊 Хорошо, давай попробуем снова.");
       showServiceList();
       pendingService = null;
     };
@@ -98,14 +106,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function capitalize(text) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    return text.toLocaleLowerCase().replace(/^./u, ch => ch.toLocaleUpperCase());
+  }
+
+  function normalize(text) {
+    return text.toLowerCase().replace(/[^\w\sа-яё]/gi, "").trim();
+  }
+
+  function randomResponse(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
   }
 
   function matchService(text) {
-    text = text.toLowerCase();
-    for (let name in services) {
-      if (text === name) return { exact: true, name };
-      if (name.includes(text)) return { exact: false, name };
+    text = normalize(text);
+    for (let key in services) {
+      if (normalize(key) === text) return { exact: true, name: key };
+    }
+    for (let key in services) {
+      if (normalize(key).includes(text) || text.includes(normalize(key))) {
+        return { exact: false, name: key };
+      }
     }
     return null;
   }
@@ -121,16 +141,19 @@ document.addEventListener("DOMContentLoaded", () => {
         addFollowupButtons();
       } else {
         pendingService = match.name;
-        addMessage(`🦊 Вы имели в виду \"${capitalize(match.name)}\"?`);
+        addMessage(`🦊 Вы имели в виду "${capitalize(match.name)}"?`);
         addInlineConfirmButtons();
       }
     } else {
       if (/спасибо/i.test(message)) {
-        addMessage("🦊 Всегда пожалуйста! Надеюсь, скоро увидимся ✨");
+        addMessage(randomResponse([
+          "🦊 Всегда пожалуйста! Надеюсь, скоро увидимся ✨",
+          "🦊 Обращайся, рада помочь 🌷"
+        ]));
       } else if (/пока|до свидания|бай/i.test(message)) {
         addMessage("🦊 Пока-пока! Удачного дня и шикарных ногтей 💖");
       } else {
-        addMessage("🦊 Уточните, пожалуйста, что вы имеете в виду?");
+        addMessage("🦊 Не совсем поняла... Давай выберем из списка?");
         showServiceList();
       }
     }
@@ -151,3 +174,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }, 1000);
 });
+</script>
