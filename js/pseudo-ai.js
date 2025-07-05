@@ -1,63 +1,83 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const wrapper = document.getElementById("pseudo-ai");
-  if (!wrapper) return;
+document.addEventListener("DOMContentLoaded", async () => {
+  const container = document.getElementById("pseudo-container");
+  const reactions = document.getElementById("pseudo-reactions");
 
-  const data = {
-    снятие: "Снятие без дальнейшего покрытия — 500₽.",
-    коррекция: "Коррекция длины с дизайном — 2500₽.",
-    наращивание: "Наращивание ногтей — полный комплекс + индивидуальный дизайн — 3000₽.",
-    маникюр: "Комби-маникюр — 1200₽.",
-    покрытие: "Маникюр с покрытием — 2000₽.",
+  if (!container) return;
+
+  const input = document.createElement("input");
+  input.placeholder = "Задайте вопрос об услуге...";
+  input.className = "w-full mt-2 p-2 rounded border text-sm";
+  container.appendChild(input);
+
+  const log = document.createElement("div");
+  log.className = "mt-4 space-y-2 text-sm";
+  container.appendChild(log);
+
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+  const pseudoResponse = async (text) => {
+    const lower = text.toLowerCase();
+    await delay(600); // эффект "печатает..."
+
+    if (lower.includes("снятие")) {
+      return "Снятие без дальнейшего покрытия — 500₽. Хотите записаться?";
+    }
+    if (lower.includes("коррекц")) {
+      return "Коррекция длины с дизайном — 2500₽. Запишем вас?";
+    }
+    if (lower.includes("наращив")) {
+      return "Наращивание с индивидуальным дизайном — 3000₽.";
+    }
+    if (lower.includes("покрытие") || lower.includes("маникюр")) {
+      return "Маникюр с покрытием, укреплением и дизайном — 2000₽. Уточните длину ногтей, если нужно.";
+    }
+    return "Извините, я не уверена. Попробуйте уточнить вопрос.";
   };
 
-  const keys = Object.keys(data);
-
-  const createBubble = (text, sender = "bot") => {
-    const bubble = document.createElement("div");
-    bubble.className = `px-4 py-2 rounded-2xl max-w-xs text-sm my-2 ${
-      sender === "bot"
-        ? "bg-pink-100 text-gray-800 self-start"
-        : "bg-pink-400 text-white self-end"
-    }`;
-    bubble.textContent = text;
-    return bubble;
+  const showTyping = () => {
+    const div = document.createElement("div");
+    div.className = "text-gray-500 italic";
+    div.textContent = "Печатает...";
+    log.appendChild(div);
+    return div;
   };
 
-  const renderOptions = () => {
-    const box = document.createElement("div");
-    box.className = "flex flex-wrap gap-2 mt-2";
-    keys.forEach((key) => {
+  const showResponse = async (question) => {
+    const q = document.createElement("div");
+    q.className = "font-medium text-gray-800";
+    q.textContent = question;
+    log.appendChild(q);
+
+    const typing = showTyping();
+
+    const answer = await pseudoResponse(question);
+
+    await delay(800);
+    typing.remove();
+
+    const a = document.createElement("div");
+    a.className = "text-gray-700";
+    a.textContent = answer;
+    log.appendChild(a);
+
+    // Reactions
+    reactions.innerHTML = "";
+    ["👍 Подходит", "❓ Уточнить", "📅 Записаться"].forEach(txt => {
       const btn = document.createElement("button");
-      btn.textContent = key;
-      btn.className =
-        "px-3 py-1 bg-pink-50 text-pink-500 text-xs rounded-full border border-pink-200 hover:bg-pink-100 transition";
-      btn.onclick = () => handleResponse(key);
-      box.appendChild(btn);
+      btn.className = "px-3 py-1 bg-pink-100 rounded-full text-pink-600 hover:bg-pink-200 text-xs";
+      btn.textContent = txt;
+      btn.onclick = () => {
+        input.value = "";
+        input.focus();
+      };
+      reactions.appendChild(btn);
     });
-    return box;
   };
 
-  const askQuestion = () => {
-    const msg = createBubble("Какую услугу вы хотите узнать?");
-    wrapper.appendChild(msg);
-    wrapper.appendChild(renderOptions());
-  };
-
-  const handleResponse = (key) => {
-    const userMsg = createBubble(key, "user");
-    wrapper.appendChild(userMsg);
-
-    setTimeout(() => {
-      const answer = createBubble(data[key] || "Пока нет информации об этой услуге.");
-      wrapper.appendChild(answer);
-
-      setTimeout(() => {
-        askQuestion();
-        wrapper.scrollTop = wrapper.scrollHeight;
-      }, 1000);
-    }, 600);
-  };
-
-  wrapper.classList.add("flex", "flex-col", "space-y-2");
-  askQuestion();
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter" && input.value.trim()) {
+      showResponse(input.value.trim());
+      input.value = "";
+    }
+  });
 });
