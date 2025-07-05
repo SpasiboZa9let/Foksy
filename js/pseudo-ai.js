@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 if (/запис|время|свободн|расписан|можно ли/i.test(lower)) {
   addMessage(
     `🦊 Сейчас покажу расписание — просто выбери удобное время 💅<br>
-    👉 <a href="https://dikidi.net/1456370?p=3.pi-po-ssm-sd&o=7&s=13813742&rl=0_undefined" target="_blank" class="text-pink-600 underline">Открыть запись в DIKIDI</a>`,
+    👉 <a href="https://dikidi.net/1456370?p=1.pi-ssm&o=7">Открыть запись в DIKIDI</a>`,
     true
   );
   lastResponseType = 'booking';
