@@ -11,11 +11,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const track = document.createElement("div");
   track.classList.add("reviews-track", "flex", "space-x-4");
-
   track.innerHTML = temp.innerHTML + temp.innerHTML; // дублируем
   wrapper.appendChild(track);
 
-  // При касании ставим на паузу
-  track.addEventListener("pointerdown", () => track.classList.add("paused"));
-  track.addEventListener("pointerup", () => track.classList.remove("paused"));
+  // Авто-снятие паузы после 3 секунд
+  let pauseTimeout;
+
+  track.addEventListener("pointerdown", () => {
+    track.classList.add("paused");
+
+    clearTimeout(pauseTimeout);
+    pauseTimeout = setTimeout(() => {
+      track.classList.remove("paused");
+    }, 3000); // снимаем паузу через 3 сек
+  });
 });
