@@ -23,3 +23,27 @@
   @apply bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-pink-200 transition;
   cursor: pointer;
 }
+.service-item {
+  background: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.service-item:hover {
+  background: #fdf6f9;
+}
+
+.service-details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.service-item.active .service-details {
+  max-height: 200px;
+  opacity: 1;
+}
