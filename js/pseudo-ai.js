@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn1 = document.createElement("button");
     btn1.textContent = "👍 Подходит";
     btn1.className = "bg-green-500 text-white px-3 py-1 rounded-xl text-sm";
-    btn1.onclick = () => addMessage("🤖 Отлично! Обращайтесь в любое время.");
+    btn1.onclick = () => addMessage("🦊 Отлично! Обращайтесь в любое время.");
 
     const btn2 = document.createElement("button");
     btn2.textContent = "❓ Уточнить";
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const list = Object.keys(services)
         .map((s) => `• ${capitalize(s)}`)
         .join("\n");
-      addMessage("🤖 Вот список доступных услуг:\n" + list);
+      addMessage("🦊 Вот список доступных услуг:\n" + list);
     };
 
     const btn3 = document.createElement("button");
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnYes.className = "bg-green-500 text-white px-3 py-1 rounded-xl text-sm";
     btnYes.onclick = () => {
       addMessage("Вы: Да");
-      addMessage(`🤖 ${services[pendingService]}\nЗапишем вас?`);
+      addMessage(`🦊 ${services[pendingService]}\nЗапишем вас?`);
       addFollowupButtons();
       pendingService = null;
     };
@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnNo.className = "bg-gray-400 text-white px-3 py-1 rounded-xl text-sm";
     btnNo.onclick = () => {
       addMessage("Вы: Нет");
-      addMessage("🤖 Уточните, пожалуйста, какую услугу вы ищете.");
+      addMessage("🦊 Уточните, пожалуйста, какую услугу вы ищете.");
       pendingService = null;
     };
 
@@ -104,18 +104,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const match = matchService(message);
     if (match) {
       if (match.exact) {
-        addMessage(`🤖 ${services[match.name]}\nЗапишем вас?`);
+        addMessage(`🦊 ${services[match.name]}\nЗапишем вас?`);
         addFollowupButtons();
       } else {
         pendingService = match.name;
-        addMessage(`🤖 Вы имели в виду "${capitalize(match.name)}"?`);
+        addMessage(`🦊 Вы имели в виду "${capitalize(match.name)}"?`);
         addInlineConfirmButtons();
       }
     } else {
-      addMessage("🤖 Извините, я не уверена. Попробуйте уточнить вопрос.");
+      addMessage("🦊 Извините, я не уверена. Попробуйте уточнить вопрос.");
     }
   });
 
   // Приветственное сообщение
-  addMessage("🤖 Какую услугу вы хотите узнать?");
+  addMessage("🦊", "Привет, я Фокси. Спроси что-нибудь!");
+
 });
