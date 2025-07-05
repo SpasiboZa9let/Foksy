@@ -3,10 +3,10 @@
 ----------------------------------------------------------- */
 :root {
   /* Диаметр кружка-отзыва (одновременно высота wrapper’а) */
-  --review-size: 6rem;          /* 96 px – меняйте при желании */
+  --review-size: 6rem;          /* 96px – меняйте при желании */
 }
 
-/* Обёртка секции. Ширина тянется на 100 %, высота = 1 кружок. */
+/* Обёртка секции. Ширина тянется на 100%, высота = размер кружка */
 #reviews-wrapper {
   height: var(--review-size);
   overflow: hidden;
@@ -17,12 +17,14 @@
 .reviews-track {
   display: flex;
   align-items: center;
-  gap: 1rem;                    /* расстояние между кругами */
+  gap: 1rem; /* расстояние между кругами */
   animation: scrollReviews 20s linear infinite;
 }
-.reviews-track.paused { animation-play-state: paused; }
+.reviews-track.paused {
+  animation-play-state: paused;
+}
 
-/* Бесконечный левый скролл (-50 % ⇒ контент продублирован) */
+/* Бесконечный левый скролл (-50% ⇒ контент продублирован) */
 @keyframes scrollReviews {
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
@@ -37,22 +39,59 @@
   cursor: pointer;
   transition: transform .3s ease;
 }
-.review-img:hover { transform: scale(1.05); }
+.review-img:hover {
+  transform: scale(1.05);
+}
 
 /* -----------------------------------------------------------
-   — Остальной ваш исходный CSS (не менялся) —
+   Gallery Thumbnails
 ----------------------------------------------------------- */
 .gallery-img {
   transition: transform .3s ease;
   cursor: pointer;
 }
-.gallery-img:hover { transform: scale(1.05); }
+.gallery-img:hover {
+  transform: scale(1.05);
+}
 
+/* -----------------------------------------------------------
+   Gallery Modal Animations
+----------------------------------------------------------- */
+#gallery-modal {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+#gallery-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+#gallery-modal img {
+  transform: scale(0);
+  transition: transform .3s ease;
+}
+#gallery-modal.open img {
+  transform: scale(1);
+}
+#gallery-modal.closing {
+  opacity: 0;
+  pointer-events: none;
+}
+#gallery-modal.closing img {
+  transform: scale(0);
+}
+
+/* -----------------------------------------------------------
+   Pseudo-AI button
+----------------------------------------------------------- */
 .ai-btn {
   @apply bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-medium hover:bg-pink-200 transition;
   cursor: pointer;
 }
 
+/* -----------------------------------------------------------
+   Accordion-style Services List
+----------------------------------------------------------- */
 .service-item {
   background: #fff;
   border-radius: 1rem;
@@ -61,7 +100,9 @@
   cursor: pointer;
   transition: background .3s;
 }
-.service-item:hover { background: #fdf6f9; }
+.service-item:hover {
+  background: #fdf6f9;
+}
 
 .service-details {
   max-height: 0;
