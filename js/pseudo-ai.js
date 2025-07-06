@@ -12,7 +12,6 @@ const greetings = [
   `Приветик, рада тебя видеть! 💖`
 ];
 
-
 function randomGreeting() {
   const index = Math.floor(Math.random() * greetings.length);
   return greetings[index];
@@ -37,6 +36,14 @@ window.addEventListener("DOMContentLoaded", () => {
    </p>`,
   true
 );
+setTimeout(() => {
+  document
+    .querySelectorAll('[data-action]')
+    .forEach(el => el.addEventListener('click', () => {
+      const value = el.getAttribute('data-action');
+      if (value) handleUserInput(value);
+    }));
+}, 0);
 
 
   // 3) Навешиваем отправку формы
