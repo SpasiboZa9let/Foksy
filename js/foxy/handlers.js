@@ -1,5 +1,3 @@
-// js/foxy/handlers.js
-
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
 import { emoji } from "./personality.js";
@@ -16,28 +14,39 @@ export function handleUserInput(message) {
   const input = message.trim().toLowerCase();
 
   // Фильтрация повторов
-  if (input === lastInput.toLowerCase()) return;
-  setLastInput(message); // сохраняем оригинал
+  if (input === lastInput.value) return;
+  setLastInput(input);
 
   addMessage(`Вы: ${message}`);
 
   // Услуга
   const svc = matchService(input);
-  if (svc && typeof svc === "object" && "name" in svc) {
+  if (svc) {
+    const response = services[svc.name];
+
     if (svc.exact) {
-      addMessage(`${emoji(foxyMood)} ${services[svc.name]}`);
-      renderBookingOptions();
+      if (response) {
+        addMessage(`${emoji(foxyMood)} ${response}`);
+        renderBookingOptions();
+      } else {
+        addMessage(`Нашла услугу «${svc.name}», но пока не знаю, что сказать 😅`);
+      }
     } else {
       addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         () => {
-          addMessage("Отличный выбор! 💖");
-          addMessage(services[svc.name]);
-          renderBookingOptions();
+          if (response) {
+            addMessage("Отличный выбор! 💖");
+            addMessage(response);
+            renderBookingOptions();
+          } else {
+            addMessage(`Нашла услугу «${svc.name}», но пока не знаю, что сказать 😅`);
+          }
         },
         () => renderServiceList(handleUserInput)
       );
     }
+
     return;
   }
 
