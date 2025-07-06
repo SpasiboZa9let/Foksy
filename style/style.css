@@ -136,11 +136,11 @@
   cursor: pointer;
 }
 h2 {
-  font-size: 1.25rem; /* = 20px */
+  font-size: 1.45rem; /* = 20px */
 }
 
 @media (min-width: 640px) {
   h2 {
-    font-size: 1.375rem; /* = 22px на планшетах и выше */
+    font-size: 1.575rem; /* = 22px на планшетах и выше */
   }
 }
