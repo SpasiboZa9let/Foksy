@@ -1,3 +1,5 @@
+// js/foxy/handlers.js
+
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
 import { emoji } from "./personality.js";
