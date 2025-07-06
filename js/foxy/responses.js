@@ -15,14 +15,18 @@ export const services = {
 export function matchService(text) {
   const input = normalize(text);
 
-  // 1) Точное совпадение
+  // Исключаем ключевые команды/интенты
+  const blocked = ["услуга", "услуги", "дизайн", "помощь", "записаться", "привет"];
+  if (blocked.includes(input)) return null;
+
+  // Точное совпадение
   for (const key of Object.keys(services)) {
     if (normalize(key) === input) {
       return { name: key, exact: true };
     }
   }
 
-  // 2) Словарь синонимов / сокращений
+  // Синонимы
   const aliases = {
     "комби": "комби маникюр",
     "маникюр": "комби маникюр",
@@ -41,7 +45,7 @@ export function matchService(text) {
     return { name: aliases[input], exact: false };
   }
 
-  // 3) Частичное совпадение по словам
+  // Частичное совпадение
   for (const key of Object.keys(services)) {
     const words = normalize(key).split(" ");
     if (words.some(word => input.includes(word))) {
@@ -51,7 +55,6 @@ export function matchService(text) {
 
   return null;
 }
-
 
 // 🦊 простое смайлишько
 export function emoji(mood = "neutral") {
