@@ -1,3 +1,6 @@
+// js/handlers.js
+// Весь файл оставляем, но правим только пути в импортах сверху:
+
 import { matchIntent }      from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
 import { emoji }            from "./personality.js";
@@ -15,22 +18,21 @@ export function handleUserInput(message) {
   clearButtons();
   addMessage(`Вы: ${message}`);
 
-  // 1. Сервисы
+  // 1. Попытка распознать сервис
   const svc = matchService(message);
   if (svc) {
     if (svc.exact) {
       addMessage(`${emoji} ${services[svc.name]}\nЗапишем вас?`);
       renderFollowupButtons(
-        () => addMessage(randomReply("serviceExact")),         // 👍 Подходит
-        () => renderServiceList(handleUserInput),             // ❓ Уточнить
-        () => renderBookingOptions()                         // 📅 Записаться
+        () => addMessage(randomReply("serviceExact")),
+        () => renderServiceList(handleUserInput),
+        () => renderBookingOptions()
       );
     } else {
       addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
-        svc.name,
         () => {
-          addMessage(`${emoji} ${services[svc.name]}\nЗапишем вас?`);
+          addMessage(randomReply("serviceConfirm"));
           renderFollowupButtons(
             () => addMessage(randomReply("serviceExact")),
             () => renderServiceList(handleUserInput),
