@@ -13,27 +13,31 @@ export const intents = [
   },
   {
     name: "booking",
-    patterns: [/запис/i, /время/i, /можно ли/i]
+    patterns: [/запис/i, /время/i, /можно ли/i, /поможешь записаться/i]
   },
   {
     name: "bye",
-    patterns: [/пока/i, /до свидания/i, /увидим/i]
+    patterns: [/пока/i, /до встречи/i, /увидим/i]
+  },
+  {
+    name: "mood",
+    patterns: [/как дела/i, /как ты/i, /как настроение/i, /что у тебя/i, /чё как/i]
+  },
+  {
+    name: "reaction",
+    patterns: [/мда/i, /ок/i, /ясно/i, /понятно/i, /заебись/i]
   },
   {
     name: "help",
-    patterns: [/что ты умеешь/i, /помощ/i, /подскажи/i, /выбрать/i]
+    patterns: [/помощ/i, /подскажи/i, /выбрать/i]
   },
   {
     name: "showServices",
-    patterns: [/услуг/i, /прайс/i, /цены/i]
+    patterns: [/услуг/i, /прайс/i, /цены/i, /расскажи.*услуг/i]
   },
   {
     name: "softWarning",
     patterns: [/хуй|пизд|ебат|дура|тупа|нах|идиот/i]
-  },
-  {
-    name: "smalltalk",
-    patterns: [/как дела/i, /всё хорошо/i]
   },
   {
     name: "askAboutFoxy",
@@ -45,15 +49,6 @@ export const intents = [
       /что ты делаешь/i,
       /какая ты/i,
       /зачем нужна/i
-    ]
-  },
-  {
-    name: "smalltalkDeep",
-    patterns: [
-      /как ты/i,
-      /что у тебя/i,
-      /чем занимаешься/i,
-      /как настроение/i
     ]
   }
 ];
