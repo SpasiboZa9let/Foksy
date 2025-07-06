@@ -20,7 +20,10 @@ function randomGreeting() {
 
 window.addEventListener("DOMContentLoaded", () => {
   // 1) Случайное приветствие
-  addMessage(`<strong>${emoji} Фокси:</strong> ${randomGreeting()}`, true);
+  addMessage(
+  `<div class="foxy-fade-in"><strong>${emoji} Фокси:</strong> ${randomGreeting()}</div>`,
+  true
+);
 
   // 2) Список возможностей
   addMessage(
