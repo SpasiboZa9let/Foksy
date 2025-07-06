@@ -1,5 +1,13 @@
-export let lastInput = { value: "" };
+// js/foxy/state.js
 
-export function setLastInput(val) {
-  lastInput.value = val;
+export let foxyMood = "happy";
+
+export function setFoxyMood(mood) {
+  foxyMood = mood;
+}
+
+export let lastInput = "";
+
+export function setLastInput(input) {
+  lastInput = input;
 }
