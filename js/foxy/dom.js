@@ -45,3 +45,15 @@ export function clearButtons() {
   if (!reactions) return;
   reactions.innerHTML = "";
 }
+export function renderReactions(options = []) {
+  const reactions = getReactions();
+  if (!reactions) return;
+  reactions.innerHTML = "";
+  for (const opt of options) {
+    const btn = document.createElement("button");
+    btn.className = "ai-btn";
+    btn.textContent = opt.text;
+    btn.addEventListener("click", opt.callback);
+    reactions.appendChild(btn);
+  }
+}
