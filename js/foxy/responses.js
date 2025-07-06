@@ -9,16 +9,17 @@ export const services = {
 export function matchService(message) {
   const input = message.trim().toLowerCase();
 
-  for (const name of Object.keys(services)) {
-    if (input === name.toLowerCase().trim()) {
+  for (const key of Object.keys(services)) {
+    const name = key.toLowerCase().trim();
+    if (input === name) {
       return { name, exact: true };
     }
   }
 
-  for (const name of Object.keys(services)) {
-    const base = name.split(" ")[0];
+  for (const key of Object.keys(services)) {
+    const base = key.split(" ")[0].toLowerCase();
     if (input.includes(base)) {
-      return { name, exact: false };
+      return { name: key.toLowerCase().trim(), exact: false };
     }
   }
 
