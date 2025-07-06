@@ -1,4 +1,5 @@
+export let lastInput = { value: "" };
 
-// js/state.js
-// Новый файл для хранения «настроения» Фокси
-export let foxyMood = "😊";
+export function setLastInput(val) {
+  lastInput.value = val;
+}
