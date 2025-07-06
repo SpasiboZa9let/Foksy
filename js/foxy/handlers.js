@@ -4,7 +4,7 @@ import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService, emoji } from "./responses.js";
 import { lastInput, setLastInput, foxyMood }     from "./state.js";
 import { addMessage, clearButtons }              from "./dom.js";
-import { renderServiceList, renderBookingOptions } from "./ui.js";
+import { renderServiceList, renderReactions, renderBookingOptions } from "./ui.js";
 
 export function handleUserInput(message) {
   clearButtons();
