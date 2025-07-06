@@ -35,7 +35,7 @@ export function handleUserInput(message) {
       addMessage(randomReply("design"), true);
       return;
       case "abilities":
-      addMessage(`${emoji} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
+      addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
       addMessage(
         `<div class="foxy-suggestions text-sm leading-relaxed mt-1">
            Что тебе сейчас интереснее?
