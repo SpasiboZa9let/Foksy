@@ -101,4 +101,14 @@ function showTrendyOptions() {
   });
 
   addMessage("Хочешь, подскажу, что подойдёт под твоё настроение? 😉");
+
+  addMessage(
+    `<a href="https://www.pinterest.com/search/pins/?q=маникюр%20дизайн"
+        target="_blank" rel="noopener noreferrer"
+        class="text-pink-500 underline">
+      📌 Загляни в мой альбом вдохновения на Pinterest 💖
+    </a>`,
+    true
+  );
 }
+
