@@ -2,6 +2,7 @@ import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
 import { emoji } from "./personality.js";
 import { foxyMood } from "./state.js";
+
 import { addMessage, clearButtons } from "./dom.js";
 import {
   renderServiceList,
@@ -9,29 +10,24 @@ import {
   renderBookingOptions
 } from "./ui.js";
 
-let alreadySuggestedBooking = false;
-
 export function handleUserInput(message) {
   clearButtons();
   addMessage(`Вы: ${message}`);
-  const msg = message.toLowerCase().trim();
 
-  // Сброс флага записи
-  alreadySuggestedBooking = false;
-
-  // 1. Попытка распознать услугу
-  const svc = matchService(msg);
+  const svc = matchService(message);
   if (svc) {
     if (svc.exact) {
+      // 💅 Показываем услугу и сразу опции записи
       addMessage(`${emoji(foxyMood)} ${services[svc.name]}`);
-      renderBooking();
+      renderBookingOptions();
     } else {
+      // 🤔 Уточнение
       addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         () => {
-          addMessage(randomReply("serviceConfirm"));
-          addMessage(`${services[svc.name]}`);
-          renderBooking();
+          addMessage("Отличный выбор! 💖");
+          addMessage(services[svc.name]);
+          renderBookingOptions();
         },
         () => renderServiceList(handleUserInput)
       );
@@ -39,19 +35,14 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 2. Интенты
-  const intent = matchIntent(msg);
+  const intent = matchIntent(message.toLowerCase().trim());
   switch (intent) {
     case "design":
       addMessage(randomReply("design"), true);
       break;
 
     case "booking":
-      renderBooking();
-      break;
-
-    case "about":
-      addMessage(randomReply("about"));
+      renderBookingOptions();
       break;
 
     case "greeting":
@@ -61,6 +52,8 @@ export function handleUserInput(message) {
     case "thanks":
     case "bye":
     case "softWarning":
+    case "styleTalk":
+    case "about":
       addMessage(randomReply(intent));
       break;
 
@@ -73,11 +66,4 @@ export function handleUserInput(message) {
       addMessage(randomReply("fallback"));
       renderServiceList(handleUserInput);
   }
-}
-
-function renderBooking() {
-  if (alreadySuggestedBooking) return;
-  alreadySuggestedBooking = true;
-  addMessage(randomReply("booking"));
-  renderBookingOptions();
 }
