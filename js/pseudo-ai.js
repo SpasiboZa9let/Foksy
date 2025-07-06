@@ -1,33 +1,34 @@
 // js/pseudo-ai.js
-import { handleUserInput } from "./foxy/handlers.js";
-import { addMessage, getChat } from "./foxy/dom.js";  // ← здесь getChat, а не chat
-import { emoji } from "./foxy/personality.js";
+import { handleUserInput } from "./handlers.js";
+import { addMessage }       from "./dom.js";
+import { emoji }            from "./personality.js";
+import { foxyMood }         from "./state.js";
 
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", () => {
   const form  = document.getElementById("pseudo-form");
   const input = document.getElementById("pseudo-input");
 
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    const msg = input.value.trim();
-    if (!msg) return;
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+    handleUserInput(text);
     input.value = "";
-    handleUserInput(msg);
   });
 
-  // стартовое приветствие
+  // Первичное приветствие от Фокси
   setTimeout(() => {
-    const chat = getChat();  // ← получаем контейнер динамически
-    if (chat && chat.childElementCount === 0) {
-      addMessage(`${emoji} Привет, я Фокси. Спроси что-нибудь!`);
-      setTimeout(() => {
-        addMessage(
-          `${emoji} Я могу:\n` +
-          `💅 рассказать про услуги\n` +
-          `💬 помочь выбрать дизайн\n` +
-          `📅 записать тебя`
-        );
-      }, 800);
-    }
+    addMessage(
+      `<strong>Фокси ${emoji(foxyMood)}:</strong> Привет! Я Фокси. Чем могу помочь?`,
+      true
+    );
+    addMessage(
+      `<ul class="list-disc list-inside text-sm">
+         <li>Узнать список услуг</li>
+         <li>Помочь выбрать дизайн</li>
+         <li>Записаться на процедуру</li>
+       </ul>`,
+      true
+    );
   }, 200);
 });
