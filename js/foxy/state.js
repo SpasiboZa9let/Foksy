@@ -1,13 +1,12 @@
 // js/foxy/state.js
 
-export let foxyMood = "happy";
-
-export function setFoxyMood(mood) {
-  foxyMood = mood;
+// Хранит последнее сообщение и текущее настроение
+export let lastInput = "";
+export function setLastInput(val) {
+  lastInput = val;
 }
 
-export let lastInput = "";
-
-export function setLastInput(input) {
-  lastInput = input;
+export let foxyMood = "neutral";
+export function setFoxyMood(mood) {
+  foxyMood = mood;
 }
