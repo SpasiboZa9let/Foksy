@@ -1,7 +1,7 @@
-// подключаем обработчик
+// js/pseudo-ai.js
 import { handleUserInput } from "./foxy/handlers.js";
-import { addMessage, chat } from "./foxy/dom.js";
-import { emoji }            from "./foxy/personality.js";
+import { addMessage, getChat } from "./foxy/dom.js";
+import { emoji } from "./foxy/personality.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form  = document.getElementById("pseudo-form");
@@ -17,11 +17,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // стартовое приветствие
   setTimeout(() => {
-    if (chat.childElementCount === 0) {
+    const chat = getChat();
+    if (chat && chat.childElementCount === 0) {
       addMessage(`${emoji} Привет, я Фокси. Спроси что-нибудь!`);
       setTimeout(() => {
         addMessage(
-          `${emoji} Я могу:\n💅 рассказать про услуги\n💬 помочь выбрать дизайн\n📅 записать тебя`
+          `${emoji} Я могу:\n` +
+          `💅 рассказать про услуги\n` +
+          `💬 помочь выбрать дизайн\n` +
+          `📅 записать тебя`
         );
       }, 800);
     }
