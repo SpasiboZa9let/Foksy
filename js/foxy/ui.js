@@ -78,3 +78,20 @@ export function renderBookingOptions() {
   tgBtn.onclick = () => window.open("https://t.me/foxold_a", "_blank");
   reactions.appendChild(tgBtn);
 }
+/**
+ * Рендер универсальных кнопок-реакций
+ * @param {Array<{text: string, callback: () => void}>} options
+ */
+export function renderReactions(options = []) {
+  clearButtons();
+  const reactions = getReactions();
+  if (!reactions) return;
+
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt.text;
+    btn.className = "ai-btn";
+    btn.addEventListener("click", opt.callback);
+    reactions.appendChild(btn);
+  });
+}
