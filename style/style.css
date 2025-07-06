@@ -18,6 +18,7 @@
   align-items: center;
   gap: 1rem;
   animation: scrollReviews 5s linear infinite;
+  min-width: 200%;
 }
 .reviews-track.paused {
   animation-play-state: paused;
