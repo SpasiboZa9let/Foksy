@@ -22,13 +22,20 @@ export function getReactions() {
 export function addMessage(text, isHTML = false) {
   const chat = getChat();
   if (!chat) return;
+
   const bubble = document.createElement("div");
-  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line";
-  if (isHTML) bubble.innerHTML = text;
-  else        bubble.textContent = text;
+  bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line foxy-fade-in";
+
+  if (isHTML) {
+    bubble.innerHTML = text;
+  } else {
+    bubble.textContent = text;
+  }
+
   chat.appendChild(bubble);
   chat.scrollTop = chat.scrollHeight;
 }
+
 
 /**
  * Очищает контейнер с кнопками (реакциями)
