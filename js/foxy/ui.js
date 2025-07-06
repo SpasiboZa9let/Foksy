@@ -4,24 +4,22 @@ import { capitalize } from "./utils.js";
 import { addMessage, clearButtons, getReactions } from "./dom.js";
 
 /**
- * Отрисовать список услуг и кнопки выбора
+ * Отрисовать только кнопки услуг, без текстового списка
  */
 export function renderServiceList(onClick) {
   clearButtons();
-  addMessage(`${emoji} Вот список доступных услуг:`);
-
-  const names = Object.keys(services).map(capitalize);
-  addMessage(names.join(", "));
+  addMessage(`${emoji} Выберите услугу:`);
 
   const reactions = getReactions();
   if (!reactions) return;
   const wr = document.createElement("div");
   wr.className = "flex gap-2 flex-wrap";
 
-  names.forEach(name => {
+  Object.keys(services).forEach(name => {
+    const display = capitalize(name);
     const key = name.toLowerCase();
     const btn = document.createElement("button");
-    btn.textContent = name;
+    btn.textContent = display;
     btn.className = "bg-gray-200 text-black px-3 py-1 rounded-xl text-sm";
     btn.onclick = () => onClick(key);
     wr.appendChild(btn);
@@ -31,7 +29,7 @@ export function renderServiceList(onClick) {
 }
 
 /**
- * Подтверждение «Вы имели в виду?»
+ * Подтверждение: "Вы имели в виду?"
  */
 export function renderInlineConfirmButtons(serviceName, onYes, onNo) {
   clearButtons();
@@ -56,16 +54,16 @@ export function renderInlineConfirmButtons(serviceName, onYes, onNo) {
 }
 
 /**
- * Кнопки для записи
+ * Кнопки записи
  */
 export function renderBookingOptions() {
   clearButtons();
   addMessage(`${emoji} Можно записаться двумя способами:`);
 
-  // DIKIDI
-  addMessage("📅 Через DIKIDI — сам выбираешь время:");
   const reactions = getReactions();
   if (!reactions) return;
+
+  addMessage("📅 Через DIKIDI — сам выбираешь время:");
   const dikidiBtn = document.createElement("button");
   dikidiBtn.textContent = "Открыть DIKIDI";
   dikidiBtn.className = "bg-pink-600 text-white px-3 py-1 rounded-xl text-sm";
@@ -73,7 +71,6 @@ export function renderBookingOptions() {
     window.open("https://dikidi.net/1456370?p=2.pi-po-ssm&o=7", "_blank");
   reactions.appendChild(dikidiBtn);
 
-  // Telegram
   addMessage("💬 Или через Telegram:");
   const tgBtn = document.createElement("button");
   tgBtn.textContent = "Связаться в Telegram";
