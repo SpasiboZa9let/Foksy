@@ -17,8 +17,8 @@ export function handleUserInput(message) {
   const svc = matchService(message);
   if (svc) {
     if (svc.exact) {
-      addMessage(`${emoji} ${services[svc.name]}\nЗапишем вас?`);
-      renderBookingOptions(); // показываем сразу кнопки записи
+      addMessage(`${emoji} ${services[svc.name]}`);
+      renderBookingOptions(); // без "Запишем вас?"
     } else {
       addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
@@ -30,7 +30,7 @@ export function handleUserInput(message) {
         () => renderServiceList(handleUserInput)
       );
     }
-    return; // ⛔️ обязательно, чтобы не пошёл дальше
+    return;
   }
 
   // 2. Интенты
@@ -54,7 +54,7 @@ export function handleUserInput(message) {
 
     case "softWarning":
       addMessage(randomReply("softWarning"));
-      return;
+      return; // ⛔️ НЕ показываем список услуг
 
     case "help":
     case "about":
