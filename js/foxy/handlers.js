@@ -6,7 +6,6 @@ import { addMessage, clearButtons } from "./dom.js";
 import {
   renderServiceList,
   renderInlineConfirmButtons,
-  renderFollowupButtons,
   renderBookingOptions
 } from "./ui.js";
 
