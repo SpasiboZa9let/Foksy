@@ -1,24 +1,24 @@
-const intentMap = [
-  { intent: "greeting",     keywords: ["привет", "здравствуй", "хай"] },
-  { intent: "bye",          keywords: ["пока", "до встречи"] },
-  { intent: "thanks",       keywords: ["спасибо", "благодарю", "спасиб"] },
-  { intent: "design",       keywords: ["дизайн", "пример", "вдохновение"] },
-  { intent: "booking",      keywords: ["запис", "хочу записаться", "запиши", "бронь"] },
-  { intent: "showServices", keywords: ["услуги", "прайс", "что есть", "расскажи про услуги"] },
-  { intent: "help",         keywords: ["помоги", "нужна помощь"] },
-  { intent: "mood",         keywords: ["как дела", "настроение", "как ты"] },
-  { intent: "softWarning",  keywords: ["хуй", "пизд", "сука", "бляд", "дура"] },
-  { intent: "smalltalkLite", keywords: ["мда", "ок", "ну", "ясно", "ага"] },
-  { intent: "styleTalk",     keywords: ["нюд", "блестк", "кошачий глаз"] },
-  { intent: "about",         keywords: ["кто ты", "что ты", "зачем ты"] }
-];
+// js/foxy/intents.js
 
-export function matchIntent(message) {
-  const lower = message.toLowerCase();
-  for (const { intent, keywords } of intentMap) {
-    if (keywords.some(k => lower.includes(k))) {
-      return intent;
-    }
+export const intentMap = {
+  greeting:     ["привет", "здравствуй", "хай"],
+  bye:          ["пока", "увидимся", "чао"],
+  thanks:       ["спасибо", "пасиб", "мерси"],
+  mood:         ["как дела", "настроение", "что нового"],
+  design:       ["дизайн", "вдохновение", "идея"],
+  booking:      ["запиши", "записаться", "бронь"],
+  showServices: ["услуги", "прайс", "что есть"],
+  help:         ["помоги", "подскажи"],
+  softWarning:  ["хуй", "сука", "блядь"],
+  smalltalkLite:["давай", "ну", "ок"],
+  styleTalk:    ["нюд", "блестк", "кошачий глаз"],
+  about:        ["кто ты", "что ты умеешь"]
+};
+
+export function matchIntent(text) {
+  text = text.toLowerCase();
+  for (const [intent, keys] of Object.entries(intentMap)) {
+    if (keys.some(k => text.includes(k))) return intent;
   }
   return null;
 }
