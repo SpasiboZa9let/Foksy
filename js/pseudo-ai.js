@@ -1,11 +1,11 @@
 // js/pseudo-ai.js
-import { matchIntent } from './foxy/intents.js';
+import { matchIntent }          from './foxy/intents.js';
 import { services, randomReply, matchService } from './foxy/responses.js';
-import { emoji } from './foxy/personality.js';
+import { emoji }                from './foxy/personality.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const chat      = document.getElementById('pseudo-chat');
-  const reactions = document.getElementById('pseudo-reactions');  // ← новый контейнер
+  const reactions = document.getElementById('pseudo-reactions');
   const form      = document.getElementById('pseudo-form');
   const input     = document.getElementById('pseudo-input');
 
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const bubble = document.createElement('div');
     bubble.className = 'bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line';
     if (isHTML) bubble.innerHTML = text;
-    else bubble.textContent = text;
+    else        bubble.textContent = text;
     chat.appendChild(bubble);
     chat.scrollTop = chat.scrollHeight;
   }
@@ -24,10 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     reactions.innerHTML = '';
   }
 
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   function addFollowupButtons() {
     clearButtons();
-    const container = document.createElement('div');
-    container.className = 'flex gap-2';
+    const wr = document.createElement('div');
+    wr.className = 'flex gap-2 flex-wrap';
 
     const btn1 = document.createElement('button');
     btn1.textContent = '👍 Подходит';
@@ -44,77 +48,79 @@ document.addEventListener('DOMContentLoaded', () => {
     btn3.className = 'bg-pink-500 text-white px-3 py-1 rounded-xl text-sm';
     btn3.onclick = showBookingOptions;
 
-    container.append(btn1, btn2, btn3);
-    reactions.appendChild(container);      // ← в reactions, а не в chat
+    wr.append(btn1, btn2, btn3);
+    reactions.appendChild(wr);
   }
 
   function showServiceList() {
     clearButtons();
-    // заголовок можно выводить в chat
+    // Заголовок
     addMessage(`${emoji} Вот список доступных услуг:`);
 
-    const container = document.createElement('div');
-    container.className = 'flex gap-2 flex-wrap';
+    // Проговорить услуги вслух
+    const names = Object.keys(services).map(capitalize);
+    addMessage(names.join(', '));
 
-    Object.keys(services).forEach(key => {
+    // Кнопки для выбора
+    const wr = document.createElement('div');
+    wr.className = 'flex gap-2 flex-wrap';
+    names.forEach(name => {
+      const key = name.toLowerCase();
       const btn = document.createElement('button');
-      btn.textContent = key[0].toUpperCase() + key.slice(1);
+      btn.textContent = name;
       btn.className = 'bg-gray-200 text-black px-3 py-1 rounded-xl text-sm';
       btn.onclick = () => handleUserInput(key);
-      container.appendChild(btn);
+      wr.appendChild(btn);
     });
-
-    reactions.appendChild(container);      // ← в reactions
+    reactions.appendChild(wr);
   }
 
-  function addInlineConfirmButtons(name) {
+  function addInlineConfirmButtons(serviceName) {
     clearButtons();
-    const container = document.createElement('div');
-    container.className = 'flex gap-2';
+    const wr = document.createElement('div');
+    wr.className = 'flex gap-2 flex-wrap';
 
-    const btnYes = document.createElement('button');
-    btnYes.textContent = '👍 Да';
-    btnYes.className = 'bg-green-500 text-white px-3 py-1 rounded-xl text-sm';
-    btnYes.onclick = () => {
-      addMessage(`${emoji} ${services[name]}\nЗапишем вас?`);
+    const yes = document.createElement('button');
+    yes.textContent = '👍 Да';
+    yes.className = 'bg-green-500 text-white px-3 py-1 rounded-xl text-sm';
+    yes.onclick = () => {
+      addMessage(`${emoji} ${services[serviceName]}\nЗапишем вас?`);
       addFollowupButtons();
     };
 
-    const btnNo = document.createElement('button');
-    btnNo.textContent = '❌ Нет';
-    btnNo.className = 'bg-gray-400 text-white px-3 py-1 rounded-xl text-sm';
-    btnNo.onclick = showServiceList;
+    const no = document.createElement('button');
+    no.textContent = '❌ Нет';
+    no.className = 'bg-gray-400 text-white px-3 py-1 rounded-xl text-sm';
+    no.onclick = showServiceList;
 
-    container.append(btnYes, btnNo);
-    reactions.appendChild(container);      // ← в reactions
+    wr.append(yes, no);
+    reactions.appendChild(wr);
   }
 
   function showBookingOptions() {
     clearButtons();
     addMessage(`${emoji} Можно записаться двумя способами:`);
     addMessage('📅 Через DIKIDI — сам выбираешь время:');
-
-    const dikidiBtn = document.createElement('button');
-    dikidiBtn.textContent = 'Открыть DIKIDI';
-    dikidiBtn.className = 'bg-pink-600 text-white px-3 py-1 rounded-xl text-sm';
-    dikidiBtn.onclick = () =>
-      window.open('https://dikidi.net/1456370?p=2.pi-po-ssm&o=7', '_blank');
-    reactions.appendChild(dikidiBtn);
+    const d = document.createElement('button');
+    d.textContent = 'Открыть DIKIDI';
+    d.className = 'bg-pink-600 text-white px-3 py-1 rounded-xl text-sm';
+    d.onclick = () => window.open('https://dikidi.net/1456370?p=2.pi-po-ssm&o=7', '_blank');
+    reactions.appendChild(d);
 
     addMessage('💬 Или через Telegram:');
-    const tgBtn = document.createElement('button');
-    tgBtn.textContent = 'Связаться в Telegram';
-    tgBtn.className = 'bg-blue-600 text-white px-3 py-1 rounded-xl text-sm';
-    tgBtn.onclick = () => window.open('https://t.me/foxold_a', '_blank');
-    reactions.appendChild(tgBtn);
+    const t = document.createElement('button');
+    t.textContent = 'Связаться в Telegram';
+    t.className = 'bg-blue-600 text-white px-3 py-1 rounded-xl text-sm';
+    t.onclick = () => window.open('https://t.me/foxold_a', '_blank');
+    reactions.appendChild(t);
   }
 
   function handleUserInput(message) {
+    clearButtons();
     addMessage(`Вы: ${message}`);
-    clearButtons();  // сброс реакций при каждом новом сообщении
     const lower = message.toLowerCase().trim();
 
-    // 1) услуги
+    // 1) Сервисы
     const svc = matchService(message);
     if (svc) {
       if (svc.exact) {
@@ -127,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 2) intent
+    // 2) Интенты
     const intent = matchIntent(lower);
     switch (intent) {
       case 'design':
@@ -163,13 +169,13 @@ document.addEventListener('DOMContentLoaded', () => {
     handleUserInput(msg);
   });
 
-  // приветствие
+  // Первичное приветствие
   setTimeout(() => {
-    if (chat && chat.childElementCount === 0) {
+    if (chat.childElementCount === 0) {
       addMessage(`${emoji} Привет, я Фокси. Спроси что-нибудь!`);
       setTimeout(() => {
         addMessage(`${emoji} Я могу:\n💅 рассказать про услуги\n💬 помочь выбрать дизайн\n📅 записать тебя`);
-      }, 1000);
+      }, 800);
     }
-  }, 100);
+  }, 200);
 });
