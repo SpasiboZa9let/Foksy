@@ -4,9 +4,10 @@ import { services, randomReply, matchService } from './foxy/responses.js';
 import { emoji } from './foxy/personality.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const chat = document.getElementById('pseudo-chat');
-  const form = document.getElementById('pseudo-form');
-  const input = document.getElementById('pseudo-input');
+  const chat      = document.getElementById('pseudo-chat');
+  const reactions = document.getElementById('pseudo-reactions');  // ← новый контейнер
+  const form      = document.getElementById('pseudo-form');
+  const input     = document.getElementById('pseudo-input');
 
   function addMessage(text, isHTML = false) {
     if (!chat) return;
@@ -19,14 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function clearButtons() {
-    if (!chat) return;
-    chat.querySelectorAll('button').forEach(btn => btn.remove());
+    if (!reactions) return;
+    reactions.innerHTML = '';
   }
 
   function addFollowupButtons() {
     clearButtons();
     const container = document.createElement('div');
-    container.className = 'flex gap-2 flex-wrap';
+    container.className = 'flex gap-2';
 
     const btn1 = document.createElement('button');
     btn1.textContent = '👍 Подходит';
@@ -44,13 +45,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btn3.onclick = showBookingOptions;
 
     container.append(btn1, btn2, btn3);
-    chat.append(container);
-    chat.scrollTop = chat.scrollHeight;
+    reactions.appendChild(container);      // ← в reactions, а не в chat
   }
 
   function showServiceList() {
     clearButtons();
+    // заголовок можно выводить в chat
     addMessage(`${emoji} Вот список доступных услуг:`);
+
     const container = document.createElement('div');
     container.className = 'flex gap-2 flex-wrap';
 
@@ -62,14 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
       container.appendChild(btn);
     });
 
-    chat.append(container);
-    chat.scrollTop = chat.scrollHeight;
+    reactions.appendChild(container);      // ← в reactions
   }
 
   function addInlineConfirmButtons(name) {
     clearButtons();
     const container = document.createElement('div');
-    container.className = 'flex gap-2 flex-wrap';
+    container.className = 'flex gap-2';
 
     const btnYes = document.createElement('button');
     btnYes.textContent = '👍 Да';
@@ -85,35 +86,35 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNo.onclick = showServiceList;
 
     container.append(btnYes, btnNo);
-    chat.append(container);
-    chat.scrollTop = chat.scrollHeight;
+    reactions.appendChild(container);      // ← в reactions
   }
 
   function showBookingOptions() {
     clearButtons();
     addMessage(`${emoji} Можно записаться двумя способами:`);
     addMessage('📅 Через DIKIDI — сам выбираешь время:');
+
     const dikidiBtn = document.createElement('button');
     dikidiBtn.textContent = 'Открыть DIKIDI';
     dikidiBtn.className = 'bg-pink-600 text-white px-3 py-1 rounded-xl text-sm';
-    dikidiBtn.onclick = () => window.open('https://dikidi.net/1456370?p=2.pi-po-ssm&o=7', '_blank');
-    chat.append(dikidiBtn);
+    dikidiBtn.onclick = () =>
+      window.open('https://dikidi.net/1456370?p=2.pi-po-ssm&o=7', '_blank');
+    reactions.appendChild(dikidiBtn);
 
     addMessage('💬 Или через Telegram:');
     const tgBtn = document.createElement('button');
     tgBtn.textContent = 'Связаться в Telegram';
     tgBtn.className = 'bg-blue-600 text-white px-3 py-1 rounded-xl text-sm';
     tgBtn.onclick = () => window.open('https://t.me/foxold_a', '_blank');
-    chat.append(tgBtn);
-
-    chat.scrollTop = chat.scrollHeight;
+    reactions.appendChild(tgBtn);
   }
 
   function handleUserInput(message) {
     addMessage(`Вы: ${message}`);
+    clearButtons();  // сброс реакций при каждом новом сообщении
     const lower = message.toLowerCase().trim();
 
-    // Сначала проверяем услуги
+    // 1) услуги
     const svc = matchService(message);
     if (svc) {
       if (svc.exact) {
@@ -126,18 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Распознаём intent
+    // 2) intent
     const intent = matchIntent(lower);
-
     switch (intent) {
       case 'design':
         addMessage(randomReply('design'), true);
-        return;
-
+        break;
       case 'booking':
         showBookingOptions();
-        return;
-
+        break;
       case 'greeting':
       case 'mood':
       case 'smalltalk':
@@ -145,14 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
       case 'bye':
       case 'softWarning':
         addMessage(randomReply(intent));
-        return;
-
+        break;
       case 'help':
       case 'about':
       case 'showServices':
         showServiceList();
-        return;
-
+        break;
       default:
         addMessage(randomReply('fallback'));
         showServiceList();
@@ -167,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
     handleUserInput(msg);
   });
 
-  // Привественное сообщение
+  // приветствие
   setTimeout(() => {
     if (chat && chat.childElementCount === 0) {
       addMessage(`${emoji} Привет, я Фокси. Спроси что-нибудь!`);
