@@ -22,31 +22,21 @@ export function handleUserInput(message) {
   // Услуга
   const svc = matchService(input);
   if (svc) {
-    const response = services[svc.name];
-
     if (svc.exact) {
-      if (response) {
-        addMessage(`${emoji(foxyMood)} ${response}`);
-        renderBookingOptions();
-      } else {
-        addMessage(`Нашла услугу «${svc.name}», но пока не знаю, что сказать 😅`);
-      }
+      addMessage(`${emoji(foxyMood)} Вот, что нашла:`);
+      addMessage(services[svc.name]);
+      renderBookingOptions();
     } else {
       addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         () => {
-          if (response) {
-            addMessage("Отличный выбор! 💖");
-            addMessage(response);
-            renderBookingOptions();
-          } else {
-            addMessage(`Нашла услугу «${svc.name}», но пока не знаю, что сказать 😅`);
-          }
+          addMessage("Отличный выбор! 💖");
+          addMessage(services[svc.name]);
+          renderBookingOptions();
         },
         () => renderServiceList(handleUserInput)
       );
     }
-
     return;
   }
 
