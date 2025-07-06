@@ -44,8 +44,7 @@ export function handleUserInput(message) {
 
     case "greeting":
     case "mood":
-    case "smalltalk":
-    case "smalltalkDeep":
+    case "reaction":
     case "thanks":
     case "bye":
       addMessage(randomReply(intent));
