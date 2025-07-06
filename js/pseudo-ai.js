@@ -29,14 +29,15 @@ window.addEventListener("DOMContentLoaded", () => {
   addMessage(
   `<p class="text-sm leading-relaxed foxy-suggestions">
      Вот чем могу быть полезна прямо сейчас:
-     <br>💅 <strong onclick="handleUserInput('прайс')">Показать весь прайс</strong>
-     <br>🎨 <strong onclick="handleUserInput('дизайн')">Подобрать дизайн под настроение</strong>
-     <br>📅 <strong onclick="handleUserInput('записаться')">Записать тебя на удобное время</strong>
-     <br>❓ <strong onclick="handleUserInput('что ты умеешь')">Что я умею?</strong>
+     <br>💅 <strong data-action="прайс">Показать весь прайс</strong>
+     <br>🎨 <strong data-action="дизайн">Подобрать дизайн под настроение</strong>
+     <br>📅 <strong data-action="записаться">Записать тебя на удобное время</strong>
+     <br>❓ <strong data-action="что ты умеешь">Что я умею?</strong>
      <br><br>Спроси меня, и всё покажу 💖
    </p>`,
   true
 );
+
 
   // 3) Навешиваем отправку формы
   const form  = document.getElementById("pseudo-form");
