@@ -1,10 +1,7 @@
 // js/foxy/handlers.js
-// Замените полностью этот файл на такой:
-
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
-import { emoji }      from "./personality.js";
-import { foxyMood }   from "./state.js";
+import { emoji }       from "./personality.js";
 
 import { addMessage, clearButtons } from "./dom.js";
 import {
@@ -22,15 +19,18 @@ export function handleUserInput(message) {
   const svc = matchService(message);
   if (svc) {
     if (svc.exact) {
-      addMessage(`${emoji(foxyMood)} ${services[svc.name]}\nЗапишем вас?`);
+      // точное совпадение — показываем цену и кнопки
+      addMessage(`${emoji} ${services[svc.name]}\nЗапишем вас?`);
       renderFollowupButtons(
         () => addMessage(randomReply("serviceExact")),
         () => renderServiceList(handleUserInput),
         () => renderBookingOptions()
       );
     } else {
-      addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
+      // неточное совпадение — уточняем
+      addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
+        svc.name,
         () => {
           addMessage(randomReply("serviceConfirm"));
           renderFollowupButtons(
