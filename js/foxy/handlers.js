@@ -2,7 +2,6 @@ import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
 import { emoji } from "./personality.js";
 import { foxyMood, lastInput, setLastInput } from "./state.js";
-
 import { addMessage, clearButtons } from "./dom.js";
 import {
   renderServiceList,
@@ -15,14 +14,14 @@ export function handleUserInput(message) {
   const input = message.trim().toLowerCase();
 
   // Фильтрация повторов
-  if (input === lastInput.value) return;
-  setLastInput(input);
+  if (input === lastInput.toLowerCase()) return;
+  setLastInput(message); // сохраняем оригинал
 
   addMessage(`Вы: ${message}`);
 
   // Услуга
   const svc = matchService(input);
-  if (svc) {
+  if (svc && typeof svc === "object" && "name" in svc) {
     if (svc.exact) {
       addMessage(`${emoji(foxyMood)} ${services[svc.name]}`);
       renderBookingOptions();
