@@ -1,30 +1,38 @@
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
 import { emoji } from "./personality.js";
-
+import { foxyMood } from "./state.js";
 import { addMessage, clearButtons } from "./dom.js";
 import {
   renderServiceList,
   renderInlineConfirmButtons,
+  renderFollowupButtons,
   renderBookingOptions
 } from "./ui.js";
+
+let alreadySuggestedBooking = false;
 
 export function handleUserInput(message) {
   clearButtons();
   addMessage(`Вы: ${message}`);
+  const msg = message.toLowerCase().trim();
 
-  const svc = matchService(message);
+  // Сброс флага записи
+  alreadySuggestedBooking = false;
+
+  // 1. Попытка распознать услугу
+  const svc = matchService(msg);
   if (svc) {
     if (svc.exact) {
-      addMessage(`${emoji} ${services[svc.name]}`);
-      renderBookingOptions();
+      addMessage(`${emoji(foxyMood)} ${services[svc.name]}`);
+      renderBooking();
     } else {
-      addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
+      addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
-        svc.name,
         () => {
           addMessage(randomReply("serviceConfirm"));
-          renderBookingOptions();
+          addMessage(`${services[svc.name]}`);
+          renderBooking();
         },
         () => renderServiceList(handleUserInput)
       );
@@ -32,41 +40,45 @@ export function handleUserInput(message) {
     return;
   }
 
-  const intent = matchIntent(message.toLowerCase().trim());
+  // 2. Интенты
+  const intent = matchIntent(msg);
   switch (intent) {
     case "design":
       addMessage(randomReply("design"), true);
-      return;
+      break;
 
     case "booking":
-      renderBookingOptions();
-      return;
+      renderBooking();
+      break;
+
+    case "about":
+      addMessage(randomReply("about"));
+      break;
 
     case "greeting":
     case "mood":
-    case "reaction":
+    case "smalltalk":
+    case "smalltalkLite":
     case "thanks":
     case "bye":
-      addMessage(randomReply(intent));
-      return;
-
-    case "askAboutFoxy":
-      addMessage(randomReply("askAboutFoxy"));
-      return;
-
     case "softWarning":
-      addMessage(randomReply("softWarning"));
-      return;
+      addMessage(randomReply(intent));
+      break;
 
     case "help":
-    case "about":
     case "showServices":
       renderServiceList(handleUserInput);
-      return;
+      break;
 
-    default: {
+    default:
       addMessage(randomReply("fallback"));
-      return;
-    }
+      renderServiceList(handleUserInput);
   }
+}
+
+function renderBooking() {
+  if (alreadySuggestedBooking) return;
+  alreadySuggestedBooking = true;
+  addMessage(randomReply("booking"));
+  renderBookingOptions();
 }
