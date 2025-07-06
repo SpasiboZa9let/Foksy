@@ -13,12 +13,11 @@ export function handleUserInput(message) {
   clearButtons();
   addMessage(`Вы: ${message}`);
 
-  // 1. Попытка распознать услугу
   const svc = matchService(message);
   if (svc) {
     if (svc.exact) {
       addMessage(`${emoji} ${services[svc.name]}`);
-      renderBookingOptions(); // без "Запишем вас?"
+      renderBookingOptions();
     } else {
       addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
@@ -33,7 +32,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // 2. Интенты
   const intent = matchIntent(message.toLowerCase().trim());
   switch (intent) {
     case "design":
@@ -47,14 +45,19 @@ export function handleUserInput(message) {
     case "greeting":
     case "mood":
     case "smalltalk":
+    case "smalltalkDeep":
     case "thanks":
     case "bye":
       addMessage(randomReply(intent));
       return;
 
+    case "askAboutFoxy":
+      addMessage(randomReply("askAboutFoxy"));
+      return;
+
     case "softWarning":
       addMessage(randomReply("softWarning"));
-      return; // ⛔️ НЕ показываем список услуг
+      return;
 
     case "help":
     case "about":
@@ -62,8 +65,9 @@ export function handleUserInput(message) {
       renderServiceList(handleUserInput);
       return;
 
-    default:
+    default: {
       addMessage(randomReply("fallback"));
-      renderServiceList(handleUserInput);
+      return;
+    }
   }
 }
