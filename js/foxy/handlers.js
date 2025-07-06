@@ -1,13 +1,11 @@
-// js/foxy/handlers.js
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
-import { emoji }       from "./personality.js";
+import { emoji } from "./personality.js";
 
 import { addMessage, clearButtons } from "./dom.js";
 import {
   renderServiceList,
   renderInlineConfirmButtons,
-  renderFollowupButtons,
   renderBookingOptions
 } from "./ui.js";
 
@@ -19,30 +17,20 @@ export function handleUserInput(message) {
   const svc = matchService(message);
   if (svc) {
     if (svc.exact) {
-      // точное совпадение — показываем цену и кнопки
       addMessage(`${emoji} ${services[svc.name]}\nЗапишем вас?`);
-      renderFollowupButtons(
-        () => addMessage(randomReply("serviceExact")),
-        () => renderServiceList(handleUserInput),
-        () => renderBookingOptions()
-      );
+      renderBookingOptions(); // показываем сразу кнопки записи
     } else {
-      // неточное совпадение — уточняем
       addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         svc.name,
         () => {
           addMessage(randomReply("serviceConfirm"));
-          renderFollowupButtons(
-            () => addMessage(randomReply("serviceExact")),
-            () => renderServiceList(handleUserInput),
-            () => renderBookingOptions()
-          );
+          renderBookingOptions();
         },
         () => renderServiceList(handleUserInput)
       );
     }
-    return;
+    return; // ⛔️ обязательно, чтобы не пошёл дальше
   }
 
   // 2. Интенты
@@ -50,26 +38,29 @@ export function handleUserInput(message) {
   switch (intent) {
     case "design":
       addMessage(randomReply("design"), true);
-      break;
+      return;
 
     case "booking":
       renderBookingOptions();
-      break;
+      return;
 
     case "greeting":
     case "mood":
     case "smalltalk":
     case "thanks":
     case "bye":
-    case "softWarning":
       addMessage(randomReply(intent));
-      break;
+      return;
+
+    case "softWarning":
+      addMessage(randomReply("softWarning"));
+      return;
 
     case "help":
     case "about":
     case "showServices":
       renderServiceList(handleUserInput);
-      break;
+      return;
 
     default:
       addMessage(randomReply("fallback"));
