@@ -1,7 +1,7 @@
-
 // js/foxy/responses.js
 import { pinterestLink, emoji } from "./personality.js";
 
+// 💅 список услуг
 export const services = {
   "комби маникюр":        "Снятие + комби-маникюр — 1000₽.",
   "маникюр с покрытием":  "Снятие + комби + укрепление + дизайн — от 1700₽.",
@@ -10,6 +10,7 @@ export const services = {
   "снятие покрытия":       "Снятие без дальнейшего покрытия — 500₽."
 };
 
+// 💬 шаблоны ответов по категориям
 export const replies = {
   greeting: [
     `${emoji} Привет-привет! Я Фокси 💅 Готова помочь с ноготочками!`,
@@ -38,7 +39,6 @@ export const replies = {
   fallback: [
     `${emoji} Не совсем поняла… Давай выберем из списка?`
   ],
-  // специальная генерируемая функция для Pinterest
   design: [
     () => `${emoji} Для вдохновения дизайном ногтей загляни сюда: ` +
           `<a href="${pinterestLink}" target="_blank" class="text-pink-600 underline">` +
@@ -46,9 +46,30 @@ export const replies = {
   ]
 };
 
-// Утилита случайного выбора
+// 🎲 случайный ответ из выбранной категории
 export function randomReply(intent) {
   const arr = replies[intent] || replies.fallback;
   const item = arr[Math.floor(Math.random() * arr.length)];
   return typeof item === "function" ? item() : item;
+}
+
+// 🔡 нормализация текста
+function normalize(text) {
+  return text.toLowerCase().replace(/[^\w\sа-яё]/gi, "").trim();
+}
+
+// 🧠 сопоставление пользовательского ввода с услугами
+export function matchService(text) {
+  text = normalize(text);
+  for (let key in services) {
+    if (normalize(key) === text) return { exact: true, name: key };
+  }
+  if (text.length >= 3) {
+    for (let key in services) {
+      if (normalize(key).includes(text) || text.includes(normalize(key))) {
+        return { exact: false, name: key };
+      }
+    }
+  }
+  return null;
 }
