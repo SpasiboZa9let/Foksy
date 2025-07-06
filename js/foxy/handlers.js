@@ -13,26 +13,34 @@ export function handleUserInput(message) {
   clearButtons();
   const input = message.trim().toLowerCase();
 
-  // Фильтрация повторов
   if (input === lastInput.value) return;
   setLastInput(input);
 
   addMessage(`Вы: ${message}`);
 
-  // Услуга
   const svc = matchService(input);
   if (svc) {
     if (svc.exact) {
-      addMessage(`${emoji(foxyMood)} Вот, что нашла:`);
-      addMessage(services[svc.name]);
-      renderBookingOptions();
+      const response = services[svc.name];
+      if (response) {
+        addMessage(`${emoji(foxyMood)} Вот, что нашла:`);
+        addMessage(response);
+        renderBookingOptions();
+      } else {
+        addMessage("Не нашла информацию об этой услуге 😥");
+      }
     } else {
       addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         () => {
-          addMessage("Отличный выбор! 💖");
-          addMessage(services[svc.name]);
-          renderBookingOptions();
+          const response = services[svc.name];
+          if (response) {
+            addMessage("Отличный выбор! 💖");
+            addMessage(response);
+            renderBookingOptions();
+          } else {
+            addMessage("Уточни, пожалуйста, что именно интересует.");
+          }
         },
         () => renderServiceList(handleUserInput)
       );
@@ -40,7 +48,6 @@ export function handleUserInput(message) {
     return;
   }
 
-  // Интенты
   const intent = matchIntent(input);
   switch (intent) {
     case "design":
