@@ -1,20 +1,27 @@
-import { services } from "./responses.js";
-import { emoji }    from "./personality.js";
-import { capitalize } from "./utils.js";
-import { addMessage, clearButtons, reactions } from "./dom.js";
+// js/foxy/ui.js
+import { services }      from "./responses.js";
+import { emoji }         from "./personality.js";
+import { capitalize }    from "./utils.js";
+import { addMessage, clearButtons, getReactions } from "./dom.js";
 
 /**
- * Показать список услуг и кнопки
+ * Отрисовать список услуг и кнопки выбора
+ * @param {Function} onClick — колбэк при клике на услугу (передаётся key)
  */
 export function renderServiceList(onClick) {
   clearButtons();
   addMessage(`${emoji} Вот список доступных услуг:`);
 
+  // Текстовое перечисление
   const names = Object.keys(services).map(capitalize);
   addMessage(names.join(", "));
 
+  // Кнопки
+  const reactions = getReactions();
+  if (!reactions) return;
   const wr = document.createElement("div");
   wr.className = "flex gap-2 flex-wrap";
+
   names.forEach(name => {
     const key = name.toLowerCase();
     const btn = document.createElement("button");
@@ -23,14 +30,21 @@ export function renderServiceList(onClick) {
     btn.onclick = () => onClick(key);
     wr.appendChild(btn);
   });
+
   reactions.appendChild(wr);
 }
 
 /**
- * Подтвердить услугу «Да/Нет»
+ * Отрисовать inline-подтверждение «Да/Нет»
+ * @param {string} serviceName
+ * @param {Function} onYes
+ * @param {Function} onNo
  */
 export function renderInlineConfirmButtons(serviceName, onYes, onNo) {
   clearButtons();
+  const reactions = getReactions();
+  if (!reactions) return;
+
   const wr = document.createElement("div");
   wr.className = "flex gap-2 flex-wrap";
 
@@ -49,10 +63,16 @@ export function renderInlineConfirmButtons(serviceName, onYes, onNo) {
 }
 
 /**
- * Кнопки «Подходит / Уточнить / Записаться»
+ * Отрисовать кнопки «Подходит / Уточнить / Записаться»
+ * @param {Function} onConfirm
+ * @param {Function} onRefine
+ * @param {Function} onBook
  */
 export function renderFollowupButtons(onConfirm, onRefine, onBook) {
   clearButtons();
+  const reactions = getReactions();
+  if (!reactions) return;
+
   const wr = document.createElement("div");
   wr.className = "flex gap-2 flex-wrap";
 
@@ -76,25 +96,28 @@ export function renderFollowupButtons(onConfirm, onRefine, onBook) {
 }
 
 /**
- * Варианты записи
+ * Отрисовать варианты записи
  */
 export function renderBookingOptions() {
   clearButtons();
   addMessage(`${emoji} Можно записаться двумя способами:`);
-  addMessage("📅 Через DIKIDI — сам выбираешь время:");
-  const d = document.createElement("button");
-  d.textContent = "Открыть DIKIDI";
-  d.className = "bg-pink-600 text-white px-3 py-1 rounded-xl text-sm";
-  d.onclick = () => window.open(
-    "https://dikidi.net/1456370?p=2.pi-po-ssm&o=7",
-    "_blank"
-  );
-  reactions.appendChild(d);
 
+  // DIKIDI
+  addMessage("📅 Через DIKIDI — сам выбираешь время:");
+  const reactions = getReactions();
+  if (!reactions) return;
+  const dikidiBtn = document.createElement("button");
+  dikidiBtn.textContent = "Открыть DIKIDI";
+  dikidiBtn.className = "bg-pink-600 text-white px-3 py-1 rounded-xl text-sm";
+  dikidiBtn.onclick = () =>
+    window.open("https://dikidi.net/1456370?p=2.pi-po-ssm&o=7", "_blank");
+  reactions.appendChild(dikidiBtn);
+
+  // Telegram
   addMessage("💬 Или через Telegram:");
-  const t = document.createElement("button");
-  t.textContent = "Связаться в Telegram";
-  t.className = "bg-blue-600 text-white px-3 py-1 rounded-xl text-sm";
-  t.onclick = () => window.open("https://t.me/foxold_a", "_blank");
-  reactions.appendChild(t);
+  const tgBtn = document.createElement("button");
+  tgBtn.textContent = "Связаться в Telegram";
+  tgBtn.className = "bg-blue-600 text-white px-3 py-1 rounded-xl text-sm";
+  tgBtn.onclick = () => window.open("https://t.me/foxold_a", "_blank");
+  reactions.appendChild(tgBtn);
 }
