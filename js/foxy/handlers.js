@@ -13,41 +13,38 @@ export function handleUserInput(message) {
   clearButtons();
   const input = message.trim().toLowerCase();
 
+  // Отсекаем повтор
   if (input === lastInput.value) return;
   setLastInput(input);
 
   addMessage(`Вы: ${message}`);
 
+  // Попытка определить услугу
   const svc = matchService(input);
   if (svc) {
-    if (svc.exact) {
-      const response = services[svc.name];
-      if (response) {
-        addMessage(`${emoji(foxyMood)} Вот, что нашла:`);
-        addMessage(response);
-        renderBookingOptions();
-      } else {
-        addMessage("Не нашла информацию об этой услуге 😥");
-      }
-    } else {
+    const serviceText = services[svc.name];
+
+    if (svc.exact && serviceText) {
+      addMessage(`${emoji(foxyMood)} Вот, что нашла:`);
+      addMessage(serviceText);
+      renderBookingOptions();
+    } else if (!svc.exact && serviceText) {
       addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         () => {
-          const response = services[svc.name];
-          if (response) {
-            addMessage("Отличный выбор! 💖");
-            addMessage(response);
-            renderBookingOptions();
-          } else {
-            addMessage("Уточни, пожалуйста, что именно интересует.");
-          }
+          addMessage("Отличный выбор! 💖");
+          addMessage(serviceText);
+          renderBookingOptions();
         },
         () => renderServiceList(handleUserInput)
       );
+    } else {
+      addMessage("Не нашла информацию об этой услуге 😥");
     }
     return;
   }
 
+  // Проверка интентов
   const intent = matchIntent(input);
   switch (intent) {
     case "design":
