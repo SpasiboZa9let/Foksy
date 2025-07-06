@@ -1,41 +1,67 @@
-// js/foxy/intents.js
+export const intents = [
+  {
+    name: "greeting",
+    patterns: [/^привет/i, /^здравствуй/i, /добрый (день|вечер|утро)/i]
+  },
+  {
+    name: "thanks",
+    patterns: [/спасибо/i, /благодарю/i]
+  },
+  {
+    name: "design",
+    patterns: [/дизайн/i, /что.*красиво/i, /идеи/i, /вдохнов/i]
+  },
+  {
+    name: "booking",
+    patterns: [/запис/i, /время/i, /можно ли/i]
+  },
+  {
+    name: "bye",
+    patterns: [/пока/i, /до свидания/i, /увидим/i]
+  },
+  {
+    name: "help",
+    patterns: [/что ты умеешь/i, /помощ/i, /подскажи/i, /выбрать/i]
+  },
+  {
+    name: "showServices",
+    patterns: [/услуг/i, /прайс/i, /цены/i]
+  },
+  {
+    name: "softWarning",
+    patterns: [/хуй|пизд|ебат|дура|тупа|нах|идиот/i]
+  },
+  {
+    name: "smalltalk",
+    patterns: [/как дела/i, /всё хорошо/i]
+  },
+  {
+    name: "askAboutFoxy",
+    patterns: [
+      /что ты умеешь/i,
+      /зачем ты/i,
+      /кто ты/i,
+      /что ты можешь/i,
+      /что ты делаешь/i,
+      /какая ты/i,
+      /зачем нужна/i
+    ]
+  },
+  {
+    name: "smalltalkDeep",
+    patterns: [
+      /как ты/i,
+      /что у тебя/i,
+      /чем занимаешься/i,
+      /как настроение/i
+    ]
+  }
+];
 
-// 1) Шаблоны для интенций
-const patterns = {
-  design:       /(дизайн|помощь|помоги|выбрать)/i,
-  greeting:     /^(привет|здравствуй|хай|добрый день|доброе утро|вечер)/i,
-  booking:      /(записаться|записаться можно|хочу записаться|есть\s+свобод|есть\s+время|запиши|время|свободн|окно)/i,
-  mood:         /как (дела|ты)/i,
-  smalltalk:    /расскажи что[- ]?нибудь/i,
-  about:        /(что.*умеешь|что.*можешь|ты кто|чем.*занимаешься)/i,
-  help:         /помоги|нужна помощь|подскажи/i,
-  showServices: /услуг|что.*делаешь|покажи|есть|предлагаешь/i,
-  thanks:       /спасибо|благодар/i,
-  bye:          /пока|до свидания|бай|увидимся|чао/i
-};
-
-// 2) Функция, которая по тексту возвращает имя интенции или null
 export function matchIntent(text) {
-  for (const [intent, re] of Object.entries(patterns)) {
-    if (re.test(text)) return intent;
-  }
-  return null;
-}
-
-// 3) Старая функция поиска по услугам
-export function matchService(text) {
-  const normalize = t => t.toLowerCase().replace(/[^\w\sа-яё]/gi, "").trim();
-  text = normalize(text);
-  for (let key in exports.services) {
-    if (normalize(key) === text) return { exact: true, name: key };
-  }
-  if (text.length >= 3) {
-    for (let key in exports.services) {
-      if (normalize(key).includes(text) || text.includes(normalize(key))) {
-        return { exact: false, name: key };
-      }
+  for (const intent of intents) {
+    if (intent.patterns.some(p => p.test(text))) {
+      return intent.name;
     }
   }
-  return null;
 }
-
