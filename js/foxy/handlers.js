@@ -1,10 +1,10 @@
-// js/handlers.js
-// Весь файл оставляем, но правим только пути в импортах сверху:
+// js/foxy/handlers.js
+// Замените полностью этот файл на такой:
 
-import { matchIntent }      from "./intents.js";
+import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
-import { emoji }            from "./personality.js";
-import { foxyMood }         from "./state.js";
+import { emoji }      from "./personality.js";
+import { foxyMood }   from "./state.js";
 
 import { addMessage, clearButtons } from "./dom.js";
 import {
@@ -18,18 +18,18 @@ export function handleUserInput(message) {
   clearButtons();
   addMessage(`Вы: ${message}`);
 
-  // 1. Попытка распознать сервис
+  // 1. Попытка распознать услугу
   const svc = matchService(message);
   if (svc) {
     if (svc.exact) {
-      addMessage(`${emoji} ${services[svc.name]}\nЗапишем вас?`);
+      addMessage(`${emoji(foxyMood)} ${services[svc.name]}\nЗапишем вас?`);
       renderFollowupButtons(
         () => addMessage(randomReply("serviceExact")),
         () => renderServiceList(handleUserInput),
         () => renderBookingOptions()
       );
     } else {
-      addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
+      addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         () => {
           addMessage(randomReply("serviceConfirm"));
@@ -51,9 +51,11 @@ export function handleUserInput(message) {
     case "design":
       addMessage(randomReply("design"), true);
       break;
+
     case "booking":
       renderBookingOptions();
       break;
+
     case "greeting":
     case "mood":
     case "smalltalk":
@@ -62,11 +64,13 @@ export function handleUserInput(message) {
     case "softWarning":
       addMessage(randomReply(intent));
       break;
+
     case "help":
     case "about":
     case "showServices":
       renderServiceList(handleUserInput);
       break;
+
     default:
       addMessage(randomReply("fallback"));
       renderServiceList(handleUserInput);
