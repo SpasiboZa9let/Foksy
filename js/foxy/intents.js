@@ -1,21 +1,22 @@
-export const intentMap = {
-  greeting:     ["привет", "здравствуй", "хай", "йоу"],
-  thanks:       ["спасибо", "спасиб", "пасиб", "благодарю", "мерси", "спасибл", "спасибки"],
-  bye:          ["пока", "до свидания", "увидимся", "чао", "бай"],
-  mood:         ["как дела", "как настроение", "что нового"],
-  smalltalk:    ["норм", "ничего", "всё хорошо", "так себе", "пойдет"],
-  smalltalkLite: ["давай", "ну", "ладно", "ясно", "угу", "понятно"],
-  softWarning:  ["хуй", "пизда", "блядь", "сука", "ебать", "нахуй", "дурa", "чёрт", "пиздец"],
-  booking:      ["запись", "запиши", "запиши меня", "хочу записаться", "хочу запись", "можно записаться"],
-  design:       ["дизайн", "выбери дизайн", "подскажи дизайн", "вдохновение", "идея"],
-  help:         ["помощь", "помоги", "что делать", "как выбрать"],
-  about:        ["что ты умеешь", "что ты можешь", "кто ты", "расскажи о себе", "зачем ты"],
-  showServices: ["услуги", "что ты предлагаешь", "что можно сделать", "расскажи про услуги"]
-};
+const intentMap = [
+  { intent: "greeting",     keywords: ["привет", "здравствуй", "хай"] },
+  { intent: "bye",          keywords: ["пока", "до встречи"] },
+  { intent: "thanks",       keywords: ["спасибо", "благодарю", "спасиб"] },
+  { intent: "design",       keywords: ["дизайн", "пример", "вдохновение"] },
+  { intent: "booking",      keywords: ["запис", "хочу записаться", "запиши", "бронь"] },
+  { intent: "showServices", keywords: ["услуги", "прайс", "что есть", "расскажи про услуги"] },
+  { intent: "help",         keywords: ["помоги", "нужна помощь"] },
+  { intent: "mood",         keywords: ["как дела", "настроение", "как ты"] },
+  { intent: "softWarning",  keywords: ["хуй", "пизд", "сука", "бляд", "дура"] },
+  { intent: "smalltalkLite", keywords: ["мда", "ок", "ну", "ясно", "ага"] },
+  { intent: "styleTalk",     keywords: ["нюд", "блестк", "кошачий глаз"] },
+  { intent: "about",         keywords: ["кто ты", "что ты", "зачем ты"] }
+];
 
 export function matchIntent(message) {
-  for (const [intent, triggers] of Object.entries(intentMap)) {
-    if (triggers.some(phrase => message.includes(phrase))) {
+  const lower = message.toLowerCase();
+  for (const { intent, keywords } of intentMap) {
+    if (keywords.some(k => lower.includes(k))) {
       return intent;
     }
   }
