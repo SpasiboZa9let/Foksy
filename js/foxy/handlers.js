@@ -1,7 +1,7 @@
 import { matchIntent } from "./intents.js";
 import { services, randomReply, matchService } from "./responses.js";
 import { emoji } from "./personality.js";
-import { foxyMood } from "./state.js";
+import { foxyMood, lastInput, setLastInput } from "./state.js";
 
 import { addMessage, clearButtons } from "./dom.js";
 import {
@@ -12,16 +12,21 @@ import {
 
 export function handleUserInput(message) {
   clearButtons();
+  const input = message.trim().toLowerCase();
+
+  // Фильтрация повторов
+  if (input === lastInput.value) return;
+  setLastInput(input);
+
   addMessage(`Вы: ${message}`);
 
-  const svc = matchService(message);
+  // Услуга
+  const svc = matchService(input);
   if (svc) {
     if (svc.exact) {
-      // 💅 Показываем услугу и сразу опции записи
       addMessage(`${emoji(foxyMood)} ${services[svc.name]}`);
       renderBookingOptions();
     } else {
-      // 🤔 Уточнение
       addMessage(`${emoji(foxyMood)} Вы имели в виду «${svc.name}»?`);
       renderInlineConfirmButtons(
         () => {
@@ -35,7 +40,8 @@ export function handleUserInput(message) {
     return;
   }
 
-  const intent = matchIntent(message.toLowerCase().trim());
+  // Интенты
+  const intent = matchIntent(input);
   switch (intent) {
     case "design":
       addMessage(randomReply("design"), true);
