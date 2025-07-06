@@ -35,17 +35,13 @@ export function handleUserInput(message) {
       addMessage(randomReply("design"), true);
       return;
       case "abilities":
-      addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
-      addMessage(
-        `<div class="foxy-suggestions text-sm leading-relaxed mt-1">
-           Что тебе сейчас интереснее?
-           <br>💅 <strong>Прайс</strong>
-           <br>🎨 <strong>Дизайн</strong>
-           <br>📅 <strong>Запись</strong>
-         </div>`,
-        true
-      );
-      return;
+  addMessage(`${emoji()} Я умею подбирать дизайн, рассказывать про услуги и помогать с записью на маникюр.`);
+  renderReactions([
+    { text: "💅 Прайс",       callback: () => handleUserInput("прайс") },
+    { text: "🎨 Дизайн",      callback: () => handleUserInput("дизайн") },
+    { text: "📅 Запись",      callback: () => handleUserInput("записаться") }
+  ]);
+  return;
     case "booking":
       renderBookingOptions();
       return;
