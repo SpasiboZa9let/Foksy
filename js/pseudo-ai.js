@@ -27,11 +27,12 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // 2) Список возможностей
   addMessage(
-  `<p class="text-sm leading-relaxed">
+  `<p class="text-sm leading-relaxed foxy-suggestions">
      Вот чем могу быть полезна прямо сейчас:
-     <br>💅 <strong>Показать весь прайс</strong>
-     <br>🎨 <strong>Подобрать дизайн под настроение</strong>
-     <br>📅 <strong>Записать тебя на удобное время</strong>
+     <br>💅 <strong onclick="handleUserInput('прайс')">Показать весь прайс</strong>
+     <br>🎨 <strong onclick="handleUserInput('дизайн')">Подобрать дизайн под настроение</strong>
+     <br>📅 <strong onclick="handleUserInput('записаться')">Записать тебя на удобное время</strong>
+     <br>❓ <strong onclick="handleUserInput('что ты умеешь')">Что я умею?</strong>
      <br><br>Спроси меня, и всё покажу 💖
    </p>`,
   true
