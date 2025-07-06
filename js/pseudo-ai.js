@@ -1,8 +1,9 @@
 // js/pseudo-ai.js
-import { handleUserInput } from "./handlers.js";
-import { addMessage }       from "./dom.js";
-import { emoji }            from "./personality.js";
-import { foxyMood }         from "./state.js";
+// Этот файл должен лежать сразу в папке js/, как у вас в index.html
+import { handleUserInput } from "./foxy/handlers.js";
+import { addMessage }       from "./foxy/dom.js";
+import { emoji }            from "./foxy/personality.js";
+import { foxyMood }         from "./foxy/state.js";
 
 window.addEventListener("DOMContentLoaded", () => {
   const form  = document.getElementById("pseudo-form");
