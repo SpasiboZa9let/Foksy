@@ -1,6 +1,6 @@
 // js/pseudo-ai.js
 import { handleUserInput } from "./foxy/handlers.js";
-import { addMessage, getChat } from "./foxy/dom.js";
+import { addMessage, getChat } from "./foxy/dom.js";  // ← здесь getChat, а не chat
 import { emoji } from "./foxy/personality.js";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // стартовое приветствие
   setTimeout(() => {
-    const chat = getChat();
+    const chat = getChat();  // ← получаем контейнер динамически
     if (chat && chat.childElementCount === 0) {
       addMessage(`${emoji} Привет, я Фокси. Спроси что-нибудь!`);
       setTimeout(() => {
