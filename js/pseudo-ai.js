@@ -1,180 +1,28 @@
-// js/pseudo-ai.js
-import { matchIntent }          from './foxy/intents.js';
-import { services, randomReply, matchService } from './foxy/responses.js';
-import { emoji }                from './foxy/personality.js';
+// подключаем обработчик
+import { handleUserInput } from "./foxy/handlers.js";
+import { addMessage, chat } from "./foxy/dom.js";
+import { emoji }            from "./foxy/personality.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-  const chat      = document.getElementById('pseudo-chat');
-  const reactions = document.getElementById('pseudo-reactions');
-  const form      = document.getElementById('pseudo-form');
-  const input     = document.getElementById('pseudo-input');
+document.addEventListener("DOMContentLoaded", () => {
+  const form  = document.getElementById("pseudo-form");
+  const input = document.getElementById("pseudo-input");
 
-  function addMessage(text, isHTML = false) {
-    if (!chat) return;
-    const bubble = document.createElement('div');
-    bubble.className = 'bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line';
-    if (isHTML) bubble.innerHTML = text;
-    else        bubble.textContent = text;
-    chat.appendChild(bubble);
-    chat.scrollTop = chat.scrollHeight;
-  }
-
-  function clearButtons() {
-    if (!reactions) return;
-    reactions.innerHTML = '';
-  }
-
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  function addFollowupButtons() {
-    clearButtons();
-    const wr = document.createElement('div');
-    wr.className = 'flex gap-2 flex-wrap';
-
-    const btn1 = document.createElement('button');
-    btn1.textContent = '👍 Подходит';
-    btn1.className = 'bg-green-500 text-white px-3 py-1 rounded-xl text-sm';
-    btn1.onclick = () => addMessage(randomReply('serviceExact'));
-
-    const btn2 = document.createElement('button');
-    btn2.textContent = '❓ Уточнить';
-    btn2.className = 'bg-yellow-400 text-white px-3 py-1 rounded-xl text-sm';
-    btn2.onclick = showServiceList;
-
-    const btn3 = document.createElement('button');
-    btn3.textContent = '📅 Записаться';
-    btn3.className = 'bg-pink-500 text-white px-3 py-1 rounded-xl text-sm';
-    btn3.onclick = showBookingOptions;
-
-    wr.append(btn1, btn2, btn3);
-    reactions.appendChild(wr);
-  }
-
-  function showServiceList() {
-    clearButtons();
-    // Заголовок
-    addMessage(`${emoji} Вот список доступных услуг:`);
-
-    // Проговорить услуги вслух
-    const names = Object.keys(services).map(capitalize);
-    addMessage(names.join(', '));
-
-    // Кнопки для выбора
-    const wr = document.createElement('div');
-    wr.className = 'flex gap-2 flex-wrap';
-    names.forEach(name => {
-      const key = name.toLowerCase();
-      const btn = document.createElement('button');
-      btn.textContent = name;
-      btn.className = 'bg-gray-200 text-black px-3 py-1 rounded-xl text-sm';
-      btn.onclick = () => handleUserInput(key);
-      wr.appendChild(btn);
-    });
-    reactions.appendChild(wr);
-  }
-
-  function addInlineConfirmButtons(serviceName) {
-    clearButtons();
-    const wr = document.createElement('div');
-    wr.className = 'flex gap-2 flex-wrap';
-
-    const yes = document.createElement('button');
-    yes.textContent = '👍 Да';
-    yes.className = 'bg-green-500 text-white px-3 py-1 rounded-xl text-sm';
-    yes.onclick = () => {
-      addMessage(`${emoji} ${services[serviceName]}\nЗапишем вас?`);
-      addFollowupButtons();
-    };
-
-    const no = document.createElement('button');
-    no.textContent = '❌ Нет';
-    no.className = 'bg-gray-400 text-white px-3 py-1 rounded-xl text-sm';
-    no.onclick = showServiceList;
-
-    wr.append(yes, no);
-    reactions.appendChild(wr);
-  }
-
-  function showBookingOptions() {
-    clearButtons();
-    addMessage(`${emoji} Можно записаться двумя способами:`);
-    addMessage('📅 Через DIKIDI — сам выбираешь время:');
-    const d = document.createElement('button');
-    d.textContent = 'Открыть DIKIDI';
-    d.className = 'bg-pink-600 text-white px-3 py-1 rounded-xl text-sm';
-    d.onclick = () => window.open('https://dikidi.net/1456370?p=2.pi-po-ssm&o=7', '_blank');
-    reactions.appendChild(d);
-
-    addMessage('💬 Или через Telegram:');
-    const t = document.createElement('button');
-    t.textContent = 'Связаться в Telegram';
-    t.className = 'bg-blue-600 text-white px-3 py-1 rounded-xl text-sm';
-    t.onclick = () => window.open('https://t.me/foxold_a', '_blank');
-    reactions.appendChild(t);
-  }
-
-  function handleUserInput(message) {
-    clearButtons();
-    addMessage(`Вы: ${message}`);
-    const lower = message.toLowerCase().trim();
-
-    // 1) Сервисы
-    const svc = matchService(message);
-    if (svc) {
-      if (svc.exact) {
-        addMessage(`${emoji} ${services[svc.name]}\nЗапишем вас?`);
-        addFollowupButtons();
-      } else {
-        addMessage(`${emoji} Вы имели в виду «${svc.name}»?`);
-        addInlineConfirmButtons(svc.name);
-      }
-      return;
-    }
-
-    // 2) Интенты
-    const intent = matchIntent(lower);
-    switch (intent) {
-      case 'design':
-        addMessage(randomReply('design'), true);
-        break;
-      case 'booking':
-        showBookingOptions();
-        break;
-      case 'greeting':
-      case 'mood':
-      case 'smalltalk':
-      case 'thanks':
-      case 'bye':
-      case 'softWarning':
-        addMessage(randomReply(intent));
-        break;
-      case 'help':
-      case 'about':
-      case 'showServices':
-        showServiceList();
-        break;
-      default:
-        addMessage(randomReply('fallback'));
-        showServiceList();
-    }
-  }
-
-  form.addEventListener('submit', e => {
+  form.addEventListener("submit", e => {
     e.preventDefault();
     const msg = input.value.trim();
     if (!msg) return;
-    input.value = '';
+    input.value = "";
     handleUserInput(msg);
   });
 
-  // Первичное приветствие
+  // стартовое приветствие
   setTimeout(() => {
     if (chat.childElementCount === 0) {
       addMessage(`${emoji} Привет, я Фокси. Спроси что-нибудь!`);
       setTimeout(() => {
-        addMessage(`${emoji} Я могу:\n💅 рассказать про услуги\n💬 помочь выбрать дизайн\n📅 записать тебя`);
+        addMessage(
+          `${emoji} Я могу:\n💅 рассказать про услуги\n💬 помочь выбрать дизайн\n📅 записать тебя`
+        );
       }, 800);
     }
   }, 200);
