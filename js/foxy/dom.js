@@ -1,8 +1,26 @@
-// общие DOM-утилиты: куда втыкаем чат и реакции
-export const chat = document.getElementById("pseudo-chat");
-export const reactions = document.getElementById("pseudo-reactions");
+// js/foxy/dom.js
 
+/**
+ * Возвращает контейнер для сообщений
+ */
+export function getChat() {
+  return document.getElementById("pseudo-chat");
+}
+
+/**
+ * Возвращает контейнер для кнопок-реакций
+ */
+export function getReactions() {
+  return document.getElementById("pseudo-reactions");
+}
+
+/**
+ * Добавляет в чат новое сообщение.
+ * @param {string} text — текст сообщения (или HTML, если isHTML=true)
+ * @param {boolean} [isHTML=false] — вставлять как HTML (true) или как textContent (false)
+ */
 export function addMessage(text, isHTML = false) {
+  const chat = getChat();
   if (!chat) return;
   const bubble = document.createElement("div");
   bubble.className = "bg-white p-2 rounded-xl text-sm shadow whitespace-pre-line";
@@ -12,7 +30,11 @@ export function addMessage(text, isHTML = false) {
   chat.scrollTop = chat.scrollHeight;
 }
 
+/**
+ * Очищает контейнер с кнопками (реакциями)
+ */
 export function clearButtons() {
+  const reactions = getReactions();
   if (!reactions) return;
   reactions.innerHTML = "";
 }
